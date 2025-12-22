@@ -3,116 +3,233 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Finanzas J&M (PC Master)</title>
+    <title>Javier & Mary | Dashboard PC</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
     <style>
+        /* --- DESIGN TOKENS (Tus especificaciones exactas) --- */
         :root {
-            --bg: #F1F5F9; --surface: #FFFFFF; --primary: #2563EB; 
-            --text-1: #1E293B; --text-2: #64748B; --border: #E2E8F0;
-            --success: #10B981; --danger: #EF4444; --radius: 12px;
+            --bg-app: #F7F9FC; 
+            --surface-1: #FFFFFF; /* Cards */
+            --surface-2: #F1F5FB; /* Modals/Elevated */
+            --border: #D7E0EE;
+            
+            --text-1: #0B1220;
+            --text-2: #334155;
+            --text-3: #64748B;
+
+            --primary: #2563EB;
+            --primary-hover: #1D4ED8;
+            --primary-pressed: #1E40AF;
+            --focus-ring: rgba(37, 99, 235, 0.35);
+
+            --success: #16A34A; --success-bg: #EAF7EF;
+            --danger: #DC2626; --danger-bg: #FDECEC;
+            --warning: #D97706; --warning-bg: #FFF4E5;
+            --info: #0284C7; --info-bg: #E7F6FD;
+
+            /* Radios Suave Controlado */
+            --r-card: 16px;
+            --r-btn: 12px;
+            --r-input: 10px;
+            --r-chip: 999px;
         }
+
         * { box-sizing: border-box; outline: none; }
-        body { font-family: 'Inter', sans-serif; background: var(--bg); margin: 0; padding: 20px; color: var(--text-1); height: 100vh; overflow: hidden; }
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: var(--bg-app); 
+            color: var(--text-1); 
+            margin: 0; 
+            height: 100vh; 
+            overflow: hidden; 
+            display: flex;
+        }
 
-        /* LAYOUT PRINCIPAL */
-        .app-grid {
+        /* --- LAYOUT --- */
+        .app-container {
             display: grid;
-            grid-template-columns: 320px 1fr; /* Panel lateral fijo - Contenido flexible */
-            gap: 20px;
-            height: calc(100vh - 40px);
-            max-width: 1600px;
-            margin: 0 auto;
+            grid-template-columns: 340px 1fr; /* Sidebar fija | Contenido */
+            width: 100%;
+            height: 100%;
         }
 
-        /* --- SIDEBAR (FORMULARIO) --- */
+        /* --- SIDEBAR (Formulario) --- */
         .sidebar {
-            background: var(--surface); border-radius: var(--radius); 
-            padding: 25px; display: flex; flex-direction: column; gap: 20px;
-            border: 1px solid var(--border); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
-        }
-        .logo { font-size: 20px; font-weight: 800; color: var(--primary); display: flex; align-items: center; gap: 10px; padding-bottom: 20px; border-bottom: 1px solid var(--border); }
-        
-        .form-group { margin-bottom: 15px; }
-        label { display: block; font-size: 12px; font-weight: 600; color: var(--text-2); margin-bottom: 5px; text-transform: uppercase; }
-        input, select { width: 100%; height: 40px; padding: 0 10px; border: 1px solid var(--border); border-radius: 8px; font-size: 14px; background: #F8FAFC; transition: 0.2s; }
-        input:focus, select:focus { border-color: var(--primary); background: #FFF; box-shadow: 0 0 0 3px rgba(37,99,235,0.1); }
-        
-        .btn-main { width: 100%; height: 45px; background: var(--primary); color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; margin-top: 10px; font-size: 15px; }
-        .btn-main:hover { background: #1d4ed8; }
-        .btn-sec { width: 100%; height: 35px; background: transparent; color: var(--text-2); border: 1px solid var(--border); border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 13px; margin-top: 10px; }
-
-        .tools-area { margin-top: auto; padding-top: 20px; border-top: 1px solid var(--border); display: flex; gap: 10px; }
-        .tool-btn { flex: 1; border: none; background: #F1F5F9; color: var(--text-2); padding: 8px; border-radius: 6px; cursor: pointer; font-size: 12px; display: flex; flex-direction: column; align-items: center; gap: 5px; }
-        .tool-btn:hover { background: #E2E8F0; color: var(--primary); }
-
-        /* --- MAIN CONTENT --- */
-        .main-content {
-            display: flex; flex-direction: column; gap: 20px; overflow-y: auto; padding-right: 5px;
+            background: var(--surface-1);
+            border-right: 1px solid var(--border);
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            overflow-y: auto;
+            z-index: 10;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.02);
         }
 
-        /* HEADER SUPERIOR */
+        .brand {
+            font-size: 18px; font-weight: 700; color: var(--primary);
+            display: flex; align-items: center; gap: 10px;
+            padding-bottom: 20px; border-bottom: 1px solid var(--border);
+        }
+
+        /* Form Elements */
+        .form-group { margin-bottom: 16px; }
+        label { display: block; font-size: 11px; font-weight: 600; color: var(--text-3); text-transform: uppercase; margin-bottom: 6px; letter-spacing: 0.5px; }
+        
+        input, select {
+            width: 100%; height: 42px; padding: 0 12px;
+            border: 1px solid var(--border);
+            border-radius: var(--r-input);
+            background: var(--bg-app);
+            color: var(--text-1);
+            font-size: 14px;
+            transition: all 0.2s ease;
+        }
+        
+        input:focus, select:focus {
+            border-color: var(--primary);
+            background: var(--surface-1);
+            box-shadow: 0 0 0 3px var(--focus-ring);
+        }
+
+        .btn-primary {
+            width: 100%; height: 44px;
+            background: var(--primary); color: white;
+            border: none; border-radius: var(--r-btn);
+            font-weight: 600; font-size: 14px; cursor: pointer;
+            transition: all 0.2s;
+        }
+        .btn-primary:hover { background: var(--primary-hover); }
+        .btn-primary:active { transform: scale(0.99); background: var(--primary-pressed); }
+
+        .btn-sec {
+            width: 100%; height: 38px;
+            background: transparent; color: var(--text-2);
+            border: 1px solid var(--border); border-radius: var(--r-btn);
+            font-weight: 500; font-size: 13px; cursor: pointer;
+            margin-top: 10px;
+            display: flex; align-items: center; justify-content: center; gap: 8px;
+        }
+        .btn-sec:hover { background: var(--surface-2); color: var(--text-1); }
+
+        /* --- MAIN DASHBOARD --- */
+        .main-area {
+            padding: 30px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        /* Header Area */
         .top-bar {
             display: flex; justify-content: space-between; align-items: center;
-            background: var(--surface); padding: 15px 20px; border-radius: var(--radius);
+            background: var(--surface-1);
+            padding: 16px 24px;
+            border-radius: var(--r-card);
             border: 1px solid var(--border);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.02);
         }
-        .month-nav { display: flex; align-items: center; gap: 15px; }
-        .nav-btn { background: #F1F5F9; border: none; width: 32px; height: 32px; border-radius: 50%; cursor: pointer; color: var(--text-2); transition: 0.2s; }
-        .nav-btn:hover { background: var(--primary); color: white; }
-        .month-title { font-size: 18px; font-weight: 700; color: var(--text-1); min-width: 150px; text-align: center; position: relative;}
-        #dateInput { position: absolute; top:0; left:0; width:100%; height:100%; opacity:0; cursor: pointer; }
-
-        /* KPIs */
-        .kpi-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; }
-        .kpi-card { background: var(--surface); padding: 15px 20px; border-radius: var(--radius); border: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
-        .kpi-info h4 { margin: 0 0 5px 0; font-size: 12px; color: var(--text-2); text-transform: uppercase; }
-        .kpi-info div { font-size: 24px; font-weight: 700; color: var(--text-1); }
-        .kpi-icon { width: 45px; height: 45px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 20px; }
-        .blue { background: #DBEAFE; color: var(--primary); }
-        .green { background: #DCFCE7; color: var(--success); }
-        .cyan { background: #E0F2FE; color: #0EA5E9; }
-
-        /* VISTA T & TABLA */
-        .dashboard-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; flex: 1; }
         
-        .panel { background: var(--surface); border-radius: var(--radius); border: 1px solid var(--border); display: flex; flex-direction: column; overflow: hidden; }
-        .panel-header { padding: 15px; border-bottom: 1px solid var(--border); font-weight: 700; color: var(--text-2); display: flex; justify-content: space-between; background: #F8FAFC; }
+        .month-selector { display: flex; align-items: center; gap: 16px; }
+        .month-btn { 
+            width: 32px; height: 32px; border-radius: 8px; border: 1px solid var(--border); 
+            background: var(--surface-1); color: var(--text-2); cursor: pointer; 
+            display: flex; align-items: center; justify-content: center; transition: 0.2s;
+        }
+        .month-btn:hover { background: var(--surface-2); color: var(--primary); }
         
-        .t-view { display: flex; height: 100%; }
+        .month-title { font-size: 16px; font-weight: 700; color: var(--text-1); min-width: 140px; text-align: center; position: relative; }
+        #dateInput { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+
+        .dolar-control { display: flex; align-items: center; gap: 10px; background: var(--surface-2); padding: 6px 12px; border-radius: var(--r-input); }
+        .dolar-inp { width: 70px; height: 30px; text-align: right; font-weight: 700; border: none; background: transparent; padding: 0; }
+        .dolar-inp:focus { box-shadow: none; border-bottom: 2px solid var(--primary); border-radius: 0; }
+
+        /* KPI Cards */
+        .kpi-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+        .kpi-card {
+            background: var(--surface-1); padding: 20px; border-radius: var(--r-card);
+            border: 1px solid var(--border); display: flex; flex-direction: column; gap: 5px;
+            position: relative; overflow: hidden;
+        }
+        .kpi-card::after { content:''; position: absolute; top: 0; left: 0; width: 4px; height: 100%; }
+        .kpi-card.inc::after { background: var(--success); }
+        .kpi-card.exp::after { background: var(--danger); }
+        .kpi-card.info::after { background: var(--info); }
+
+        .kpi-label { font-size: 11px; font-weight: 600; text-transform: uppercase; color: var(--text-3); }
+        .kpi-value { font-size: 26px; font-weight: 700; color: var(--text-1); letter-spacing: -0.5px; }
+
+        /* Content Grid (T-View & Chart) */
+        .content-grid { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 24px; flex: 1; min-height: 400px; }
+        
+        .panel { 
+            background: var(--surface-1); border: 1px solid var(--border); 
+            border-radius: var(--r-card); display: flex; flex-direction: column; 
+            overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+        }
+        
+        .panel-header { 
+            padding: 16px 20px; border-bottom: 1px solid var(--border); 
+            font-weight: 600; color: var(--text-2); font-size: 14px;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+
+        /* T-View Styles */
+        .t-view { display: flex; flex: 1; height: 0; /* Important for scroll */ }
         .t-col { flex: 1; display: flex; flex-direction: column; border-right: 1px solid var(--border); }
         .t-col:last-child { border-right: none; }
-        .t-head { padding: 10px; text-align: center; color: white; font-weight: 700; font-size: 13px; }
-        .t-head.inc { background: var(--success); } .t-head.exp { background: var(--danger); }
         
-        .t-list { flex: 1; overflow-y: auto; padding: 0; margin: 0; list-style: none; }
-        .t-row { display: flex; justify-content: space-between; padding: 8px 12px; border-bottom: 1px solid #F1F5F9; font-size: 13px; cursor: pointer; transition: 0.1s; }
-        .t-row:hover { background: #F8FAFC; }
-        
-        .t-date { font-weight: 600; color: var(--text-2); width: 30px; }
-        .t-desc { flex: 1; margin: 0 10px; color: var(--text-1); font-weight: 500; }
-        .t-amt { font-weight: 700; }
-        
-        .alert-date { color: var(--danger); font-weight: 800; background: #FEF2F2; padding: 2px 5px; border-radius: 4px; }
+        .t-head { padding: 12px; text-align: center; font-size: 11px; font-weight: 700; color: white; letter-spacing: 0.5px; }
+        .t-head.inc { background: var(--success); }
+        .t-head.exp { background: var(--danger); }
 
-        /* CHART AREA */
-        .chart-area { height: 250px; padding: 15px; }
+        .t-list { overflow-y: auto; padding: 0; margin: 0; list-style: none; flex: 1; }
+        .t-row { 
+            display: flex; justify-content: space-between; align-items: center; 
+            padding: 10px 16px; border-bottom: 1px solid var(--bg-app); 
+            cursor: pointer; transition: background 0.1s;
+        }
+        .t-row:hover { background: var(--surface-2); }
+        
+        .t-info { display: flex; flex-direction: column; gap: 2px; }
+        .t-meta { display: flex; align-items: center; gap: 6px; }
+        .badge-date { 
+            background: var(--surface-2); color: var(--text-2); 
+            font-size: 10px; font-weight: 700; padding: 2px 6px; border-radius: 4px; 
+        }
+        .badge-date.alert { background: var(--danger-bg); color: var(--danger); }
+        
+        .t-desc { font-weight: 500; color: var(--text-1); font-size: 13px; }
+        .t-amt { font-weight: 600; font-size: 13px; color: var(--text-1); }
+        
+        .t-total-row { 
+            padding: 12px 16px; text-align: right; background: var(--bg-app); 
+            border-top: 1px solid var(--border); font-weight: 700; font-size: 14px; 
+        }
 
+        /* Chart */
+        .chart-container { padding: 20px; height: 300px; display: flex; align-items: center; justify-content: center; }
+
+        /* Tools */
+        .backup-area { margin-top: auto; padding-top: 20px; border-top: 1px solid var(--border); display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
     </style>
 </head>
 <body>
 
-<div class="app-grid">
+<div class="app-container">
     
-    <div class="sidebar">
-        <div class="logo"><i class="fas fa-wallet"></i> Javier & Mary PC</div>
-        
+    <aside class="sidebar">
+        <div class="brand">
+            <i class="fas fa-wallet"></i> Javier & Mary
+        </div>
+
         <form id="txForm">
-            <h3 style="margin: 0 0 15px 0; font-size:14px; color:var(--text-1);">Nuevo Movimiento</h3>
-            
             <div class="form-group">
                 <label>Fecha</label>
                 <input type="date" id="fDate" required>
@@ -123,112 +240,113 @@
                 <input type="number" id="fAmount" placeholder="0.00" step="0.01" required>
             </div>
 
-            <div style="display:flex; gap:10px;">
-                <div class="form-group" style="flex:1;">
-                    <label>Tipo</label>
-                    <select id="fType" onchange="renderCats()">
-                        <option value="exp">🔴 Gasto</option>
-                        <option value="inc">🟢 Ingreso</option>
-                    </select>
-                </div>
-                <div class="form-group" style="flex:1.5;">
-                    <label>Categoría</label>
-                    <select id="fCat" onchange="renderConcepts()" required></select>
-                </div>
+            <div class="form-group">
+                <label>Tipo</label>
+                <select id="fType" onchange="renderCats()">
+                    <option value="exp">🔴 Gasto</option>
+                    <option value="inc">🟢 Ingreso</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Categoría</label>
+                <select id="fCat" onchange="renderConcepts()" required></select>
             </div>
 
             <div class="form-group">
                 <label>Concepto</label>
                 <select id="fConcept" onchange="checkNewConcept()" required></select>
-                <input type="text" id="fConceptCustom" placeholder="Nuevo concepto..." style="display:none; margin-top:5px;">
+                <input type="text" id="fConceptCustom" placeholder="Nombre del concepto..." style="display:none; margin-top:8px;">
             </div>
 
-            <div class="form-group" style="display:flex; align-items:center; gap:8px;">
-                <input type="checkbox" id="fExec" checked style="width:18px; height:18px; margin:0;">
-                <label style="margin:0; cursor:pointer;" for="fExec">Movimiento ya ejecutado</label>
+            <div style="display:flex; align-items:center; gap:8px; margin-bottom:20px; cursor:pointer;" onclick="document.getElementById('fExec').click()">
+                <input type="checkbox" id="fExec" checked style="width:16px; height:16px;">
+                <span style="font-size:12px; color:var(--text-2); font-weight:500;">Ya ejecutado (Pagado/Cobrado)</span>
             </div>
 
-            <button type="submit" id="btnSave" class="btn-main">Guardar</button>
-            <button type="button" id="btnCancel" onclick="resetForm()" class="btn-sec" style="display:none;">Cancelar Edición</button>
+            <button type="submit" id="btnSave" class="btn-primary">Registrar Movimiento</button>
+            <button type="button" id="btnCancel" onclick="resetForm()" class="btn-sec" style="display:none; border-color:var(--danger); color:var(--danger);">Cancelar</button>
         </form>
 
-        <div class="tools-area">
-            <button class="tool-btn" onclick="backup()"><i class="fas fa-download"></i> Backup</button>
-            <button class="tool-btn" onclick="document.getElementById('fileIn').click()"><i class="fas fa-upload"></i> Restaurar</button>
+        <div class="backup-area">
+            <button class="btn-sec" onclick="backup()" title="Descargar Backup"><i class="fas fa-download"></i> Backup</button>
+            <button class="btn-sec" onclick="document.getElementById('fileIn').click()" title="Cargar Backup"><i class="fas fa-upload"></i> Restaurar</button>
             <input type="file" id="fileIn" hidden onchange="restoreSmart(this)">
         </div>
-    </div>
+    </aside>
 
-    <div class="main-content">
+    <main class="main-area">
         
-        <div class="top-bar">
-            <div class="month-nav">
-                <button class="nav-btn" onclick="addMonth(-1)"><i class="fas fa-chevron-left"></i></button>
+        <header class="top-bar">
+            <div class="month-selector">
+                <button class="month-btn" onclick="addMonth(-1)"><i class="fas fa-chevron-left"></i></button>
                 <div class="month-title">
-                    <span id="monthTxt">DICIEMBRE 2025</span>
+                    <span id="monthTxt">ENERO 2026</span>
                     <input type="month" id="dateInput" onchange="loadData()">
                 </div>
-                <button class="nav-btn" onclick="addMonth(1)"><i class="fas fa-chevron-right"></i></button>
+                <button class="month-btn" onclick="addMonth(1)"><i class="fas fa-chevron-right"></i></button>
             </div>
-            
-            <div style="display:flex; align-items:center; gap:10px;">
-                <span style="font-size:12px; font-weight:600; color:var(--text-2)">DÓLAR REF:</span>
-                <input type="number" id="usdRate" value="1200" onchange="loadData()" style="width:80px; text-align:right; font-weight:700;">
-            </div>
-        </div>
 
-        <div class="kpi-grid">
-            <div class="kpi-card">
-                <div class="kpi-info"><h4>Ingresos</h4><div style="color:var(--success)" id="kpiInc">$0</div></div>
-                <div class="kpi-icon green"><i class="fas fa-arrow-up"></i></div>
+            <div class="dolar-control">
+                <span style="font-size:11px; font-weight:600; color:var(--text-3); text-transform:uppercase;">Dólar Ref:</span>
+                <span style="color:var(--text-2); font-weight:600;">$</span>
+                <input type="number" id="usdRate" value="1200" class="dolar-inp" onchange="updateCalculations()"> 
             </div>
-            <div class="kpi-card">
-                <div class="kpi-info"><h4>Egresos</h4><div style="color:var(--danger)" id="kpiExp">$0</div></div>
-                <div class="kpi-icon blue" style="background:#FEE2E2; color:var(--danger)"><i class="fas fa-arrow-down"></i></div>
-            </div>
-            <div class="kpi-card">
-                <div class="kpi-info"><h4>Ahorro USD</h4><div id="kpiUsd" style="color:#0EA5E9">$0</div></div>
-                <div class="kpi-icon cyan"><i class="fas fa-dollar-sign"></i></div>
-            </div>
-        </div>
+        </header>
 
-        <div class="dashboard-grid">
+        <section class="kpi-grid">
+            <div class="kpi-card inc">
+                <span class="kpi-label">Ingresos Totales</span>
+                <span class="kpi-value" id="kpiInc" style="color:var(--success)">$0</span>
+            </div>
+            <div class="kpi-card exp">
+                <span class="kpi-label">Egresos Totales</span>
+                <span class="kpi-value" id="kpiExp" style="color:var(--danger)">$0</span>
+            </div>
+            <div class="kpi-card info">
+                <span class="kpi-label">Ahorro en Dólares</span>
+                <span class="kpi-value" id="kpiUsd" style="color:var(--info)">US$ 0</span>
+                <span style="font-size:12px; color:var(--text-3);" id="kpiBalLabel">Balance: $0</span>
+            </div>
+        </section>
+
+        <section class="content-grid">
             
             <div class="panel">
-                <div class="panel-header">Movimientos del Mes</div>
+                <div class="panel-header">
+                    <span><i class="fas fa-list-ul"></i> Detalle de Movimientos</span>
+                </div>
                 <div class="t-view">
                     <div class="t-col">
                         <div class="t-head inc">INGRESOS</div>
                         <ul class="t-list" id="t-list-inc"></ul>
+                        <div class="t-total-row" id="total-inc" style="color:var(--success)">$0</div>
                     </div>
                     <div class="t-col">
                         <div class="t-head exp">EGRESOS</div>
                         <ul class="t-list" id="t-list-exp"></ul>
+                        <div class="t-total-row" id="total-exp" style="color:var(--danger)">$0</div>
                     </div>
-                </div>
-                <div style="display:flex; border-top:1px solid var(--border); background:#F8FAFC;">
-                    <div style="flex:1; padding:10px; text-align:center; font-weight:800; color:var(--success);" id="total-inc">$0</div>
-                    <div style="flex:1; padding:10px; text-align:center; font-weight:800; color:var(--danger); border-left:1px solid var(--border);" id="total-exp">$0</div>
                 </div>
             </div>
 
             <div class="panel">
                 <div class="panel-header">
-                    <span>Distribución de Gastos</span>
-                    <button onclick="resetChart()" style="border:none; background:none; color:var(--primary); cursor:pointer; font-size:12px; font-weight:600;" id="chartReset">Ver Todo</button>
+                    <span><i class="fas fa-chart-pie"></i> Distribución</span>
+                    <button id="chartReset" onclick="resetChart()" style="border:none; background:none; color:var(--primary); font-size:12px; cursor:pointer; font-weight:600; display:none;">Ver Todo</button>
                 </div>
-                <div class="chart-area">
+                <div class="chart-container">
                     <canvas id="myChart"></canvas>
                 </div>
             </div>
 
-        </div>
+        </section>
 
-    </div>
+    </main>
 </div>
 
 <script>
-    /* LÓGICA COMPARTIDA 100% CON LA VERSIÓN MÓVIL */
+    // --- DATA & LOGIC (Compatible con Mobile) ---
     const defData = { 
         txs: [], 
         cats: { exp:['Esenciales','Deudas','Personal','Ahorro'], inc:['Sueldo','Ventas','Varios'] },
@@ -243,7 +361,8 @@
         }
     };
 
-    let data = JSON.parse(localStorage.getItem('finData_v16')) || defData; // Usa la misma KEY 'v16' para sincronizar mentalmente
+    // Usamos 'finData_v16' para compartir datos con la versión móvil final
+    let data = JSON.parse(localStorage.getItem('finData_v16')) || defData;
     let editId = null;
     let chartInstance = null;
 
@@ -252,6 +371,8 @@
         document.getElementById('fDate').value = d.toISOString().split('T')[0];
         document.getElementById('dateInput').value = `${d.getFullYear()}-${(d.getMonth()+1).toString().padStart(2,'0')}`;
         document.getElementById('usdRate').value = localStorage.getItem('usdRate') || 1200;
+        
+        renderCats(); // Inicializar selects
         loadData();
     };
 
@@ -259,25 +380,32 @@
         const ym = document.getElementById('dateInput').value;
         const [y, m] = ym.split('-');
         
+        // Titulo Mes
         const dateObj = new Date(parseInt(y), parseInt(m)-1, 1);
         const mName = dateObj.toLocaleString('es-ES', {month:'long'}).toUpperCase();
         document.getElementById('monthTxt').innerText = `${mName} ${y}`;
         
+        // Filtro Transacciones
         const txs = (data.txs || []).filter(t => t.date.startsWith(ym)).sort((a,b) => b.date.localeCompare(a.date));
         
         renderTView(txs);
         renderChart(txs);
         calcKPIs(txs);
-        
-        // Inicializar formulario si está vacío
-        if(document.getElementById('fCat').options.length === 0) renderCats();
     }
 
-    /* RENDER CUENTA T (FORMATO PC) */
+    function updateCalculations() {
+        // Solo recalcula KPIs sin recargar toda la UI (Optimización)
+        const ym = document.getElementById('dateInput').value;
+        const txs = (data.txs || []).filter(t => t.date.startsWith(ym));
+        calcKPIs(txs);
+    }
+
+    /* --- VISTA T (ESTILO DASHBOARD) --- */
     function renderTView(txs) {
         const incList = document.getElementById('t-list-inc');
         const expList = document.getElementById('t-list-exp');
         incList.innerHTML = ''; expList.innerHTML = '';
+        
         let tInc = 0, tExp = 0;
         const today = new Date(); today.setHours(0,0,0,0);
 
@@ -285,23 +413,25 @@
             const day = t.date.split('-')[2];
             const txDate = new Date(t.date + 'T00:00:00');
             const diffDays = Math.ceil((txDate - today) / (1000 * 60 * 60 * 24));
-            const isNear = diffDays >= 0 && diffDays <= 5;
-            const alertClass = isNear ? 'alert-date' : '';
-            
+            const isNear = diffDays >= 0 && diffDays <= 5; 
+            const badgeClass = isNear ? 'badge-date alert' : 'badge-date';
+
             const li = document.createElement('li');
             li.className = 't-row';
-            li.title = "Click para editar o borrar";
             li.onclick = () => edit(t.id);
 
             li.innerHTML = `
-                <div style="display:flex; align-items:center;">
-                    <span class="t-date ${alertClass}">${day}</span>
-                    ${!t.exec ? '<i class="fas fa-clock" style="color:#F59E0B; margin-right:5px; font-size:11px;"></i>' : ''}
+                <div class="t-info">
+                    <div class="t-meta">
+                        <span class="${badgeClass}">${day}</span>
+                        <span style="font-size:10px; font-weight:700; color:var(--text-3); text-transform:uppercase;">${t.cat}</span>
+                        ${!t.exec ? '<i class="fas fa-clock" style="font-size:10px; color:var(--warning);"></i>' : ''}
+                    </div>
                     <span class="t-desc">${t.desc}</span>
                 </div>
                 <span class="t-amt">$${Math.abs(t.amount).toLocaleString()}</span>
             `;
-            
+
             if(t.type === 'inc') { incList.appendChild(li); tInc += Math.abs(t.amount); }
             else { expList.appendChild(li); tExp += Math.abs(t.amount); }
         });
@@ -310,10 +440,11 @@
         document.getElementById('total-exp').innerText = `$${tExp.toLocaleString()}`;
     }
 
-    /* GRÁFICO PC */
+    /* --- CHARTS --- */
     function renderChart(txs, filterCat = null) {
         const ctx = document.getElementById('myChart');
         if(chartInstance) chartInstance.destroy();
+        
         const exps = txs.filter(t => t.type === 'exp');
         let dataMap = {};
 
@@ -322,7 +453,7 @@
             dataMap = exps.reduce((a,t) => { a[t.cat] = (a[t.cat]||0)+ +t.amount; return a; }, {});
         } else {
             document.getElementById('chartReset').style.display = 'block';
-            document.getElementById('chartReset').innerText = `⬅ Volver (${filterCat})`;
+            document.getElementById('chartReset').innerText = `⬅ Volver a Categorías`;
             dataMap = exps.filter(t => t.cat === filterCat).reduce((a,t) => { a[t.desc] = (a[t.desc]||0)+ +t.amount; return a; }, {});
         }
         
@@ -332,10 +463,10 @@
 
         chartInstance = new Chart(ctx, {
             type: 'doughnut',
-            data: { labels: labels, datasets: [{ data: values, backgroundColor: colors, borderWidth:0 }] },
+            data: { labels: labels, datasets: [{ data: values, backgroundColor: colors, borderWidth: 0 }] },
             options: { 
                 responsive: true, maintainAspectRatio: false,
-                plugins: { legend: { position:'right' } },
+                plugins: { legend: { position:'right', labels: { font: { family: 'Inter', size: 11 }, boxWidth: 10 } } },
                 onClick: (evt, items) => {
                     if (items.length > 0 && !filterCat) {
                         const idx = items[0].index; renderChart(txs, labels[idx]);
@@ -345,22 +476,52 @@
         });
     }
 
-    /* FORMULARIO Y LÓGICA */
+    function resetChart() { loadData(); }
+
+    /* --- KPIs (Lógica Corregida) --- */
+    function calcKPIs(txs) {
+        let inc = 0, exp = 0;
+        txs.forEach(t => {
+            if(t.type === 'inc') inc += Math.abs(t.amount);
+            else exp += Math.abs(t.amount);
+        });
+
+        const bal = inc - exp;
+        const rate = parseFloat(document.getElementById('usdRate').value) || 1200;
+        
+        // Guardar tasa para el futuro
+        localStorage.setItem('usdRate', rate);
+
+        document.getElementById('kpiInc').innerText = `$${inc.toLocaleString()}`;
+        document.getElementById('kpiExp').innerText = `$${exp.toLocaleString()}`;
+        
+        const usd = bal / rate;
+        document.getElementById('kpiUsd').innerText = `US$ ${usd.toFixed(2)}`;
+        
+        document.getElementById('kpiBalLabel').innerText = `Balance: $${bal.toLocaleString()}`;
+        document.getElementById('kpiBalLabel').style.color = bal >= 0 ? 'var(--text-3)' : 'var(--danger)';
+    }
+
+    /* --- FORM LOGIC --- */
     function renderCats() {
         const sel = document.getElementById('fCat'); sel.innerHTML = '';
-        (data.cats[document.getElementById('fType').value] || []).forEach(c => sel.add(new Option(c,c))); 
+        const type = document.getElementById('fType').value;
+        (data.cats[type] || []).forEach(c => sel.add(new Option(c,c))); 
         sel.add(new Option('+ Crear Categoría', 'new_cat'));
         renderConcepts();
     }
+    
     function renderConcepts() {
         const cat = document.getElementById('fCat').value;
         if(cat === 'new_cat') { checkNewCat(); return; }
+        
         const sel = document.getElementById('fConcept'); sel.innerHTML = '';
         const concepts = data.concepts[cat] || [];
         concepts.forEach(c => sel.add(new Option(c,c)));
         sel.add(new Option('+ Crear Concepto', 'new_con'));
         checkNewConcept();
     }
+
     function checkNewCat() {
         if(document.getElementById('fCat').value === 'new_cat') {
             const n = prompt('Nueva Categoría:');
@@ -371,15 +532,17 @@
             } else renderCats();
         }
     }
+
     function checkNewConcept() {
         const val = document.getElementById('fConcept').value;
         const customInp = document.getElementById('fConceptCustom');
-        customInp.style.display = (val === 'new_con') ? 'block' : 'none';
-        if(val === 'new_con') customInp.focus();
+        if(val === 'new_con') { customInp.style.display = 'block'; customInp.required = true; customInp.focus(); } 
+        else { customInp.style.display = 'none'; customInp.required = false; }
     }
 
     document.getElementById('txForm').onsubmit = (e) => {
         e.preventDefault();
+        
         let finalDesc = document.getElementById('fConcept').value;
         const cat = document.getElementById('fCat').value;
         if(finalDesc === 'new_con') {
@@ -387,7 +550,7 @@
             if(!data.concepts[cat]) data.concepts[cat] = [];
             if(!data.concepts[cat].includes(finalDesc)) { data.concepts[cat].push(finalDesc); save(); }
         }
-        
+
         const tx = {
             id: editId || Date.now(),
             date: document.getElementById('fDate').value,
@@ -399,88 +562,77 @@
         };
 
         if(editId) {
-            if(confirm("¿Guardar cambios en el movimiento?")) {
-                const idx = data.txs.findIndex(t => t.id == editId); 
-                if(idx !== -1) data.txs[idx] = tx;
-            }
-        } else { 
-            data.txs.push(tx); 
+            const idx = data.txs.findIndex(t => t.id == editId);
+            if(idx !== -1) data.txs[idx] = tx;
+        } else {
+            data.txs.push(tx);
         }
+
         save(); resetForm(); loadData();
     };
 
     function edit(id) {
-        const t = data.txs.find(x => x.id == id); if(!t) return; 
-        if(confirm("¿Quieres editar este movimiento? \n(Acepta para editar, Cancela para borrar)")) {
-            // EDITAR
-            editId = id; 
-            document.getElementById('fDate').value = t.date; 
-            document.getElementById('fAmount').value = t.amount; 
-            document.getElementById('fType').value = t.type; 
-            renderCats(); document.getElementById('fCat').value = t.cat; 
-            renderConcepts(); 
-            
-            // Check if concept exists, if not add temp
-            let exists = false;
-            for(let i=0; i<document.getElementById('fConcept').options.length; i++){
-                if(document.getElementById('fConcept').options[i].value == t.desc) exists = true;
-            }
-            if(!exists) { const opt = new Option(t.desc, t.desc); document.getElementById('fConcept').add(opt, 0); }
-            document.getElementById('fConcept').value = t.desc;
-
-            document.getElementById('fExec').checked = t.exec; 
-            document.getElementById('btnSave').innerText = 'Actualizar Movimiento';
-            document.getElementById('btnCancel').style.display = 'block';
-        } else {
-            // BORRAR
-            if(confirm("¿Confirmas eliminar este movimiento permanentemente?")) {
-                data.txs = data.txs.filter(t => t.id != id); save(); loadData();
-            }
+        const t = data.txs.find(x => x.id == id); if(!t) return;
+        
+        // Populate Form
+        editId = id;
+        document.getElementById('fDate').value = t.date;
+        document.getElementById('fAmount').value = t.amount;
+        document.getElementById('fType').value = t.type;
+        renderCats(); document.getElementById('fCat').value = t.cat;
+        renderConcepts(); 
+        
+        // Handle custom concepts legacy
+        if(!document.getElementById('fConcept').querySelector(`option[value="${t.desc}"]`)) {
+             const opt = new Option(t.desc, t.desc);
+             document.getElementById('fConcept').add(opt, 0);
         }
+        document.getElementById('fConcept').value = t.desc;
+        document.getElementById('fExec').checked = t.exec;
+
+        // Change Buttons
+        document.getElementById('btnSave').innerText = 'Actualizar Movimiento';
+        document.getElementById('btnSave').style.background = 'var(--warning)';
+        document.getElementById('btnCancel').style.display = 'flex';
     }
 
     function resetForm() {
-        editId = null; document.getElementById('txForm').reset(); 
-        document.getElementById('fDate').value = new Date().toISOString().split('T')[0]; 
-        document.getElementById('btnSave').innerText = 'Guardar'; 
+        editId = null;
+        document.getElementById('txForm').reset();
+        document.getElementById('fDate').value = new Date().toISOString().split('T')[0];
+        document.getElementById('btnSave').innerText = 'Registrar Movimiento';
+        document.getElementById('btnSave').style.background = 'var(--primary)';
         document.getElementById('btnCancel').style.display = 'none';
         document.getElementById('fConceptCustom').style.display = 'none';
     }
-    
-    function resetChart() { loadData(); }
-    function addMonth(n) { const inp = document.getElementById('dateInput'); let [y,m] = inp.value.split('-').map(Number); const d = new Date(y, m-1+n, 1); inp.value = `${d.getFullYear()}-${(d.getMonth()+1).toString().padStart(2,'0')}`; loadData(); }
 
-    function calcKPIs(txs) { 
-        const bal = txs.reduce((acc, t) => acc + (t.type=='inc' ? +t.amount : -t.amount), 0); 
-        const inc = txs.filter(t=>t.type=='inc').reduce((acc, t) => acc + t.amount, 0);
-        const exp = txs.filter(t=>t.type=='exp').reduce((acc, t) => acc + t.amount, 0);
-        const rate = +document.getElementById('usdRate').value || 1; 
-        localStorage.setItem('usdRate', rate); 
-        
-        document.getElementById('kpiBal').innerText = `$${bal.toLocaleString()}`; 
-        document.getElementById('kpiInc').innerText = `$${inc.toLocaleString()}`;
-        document.getElementById('kpiExp').innerText = `$${exp.toLocaleString()}`;
-        document.getElementById('kpiUsd').innerText = `US$ ${(bal/rate).toFixed(2)}`; 
+    function addMonth(n) { 
+        const inp = document.getElementById('dateInput'); 
+        let [y,m] = inp.value.split('-').map(Number); 
+        const d = new Date(y, m-1+n, 1); 
+        inp.value = `${d.getFullYear()}-${(d.getMonth()+1).toString().padStart(2,'0')}`; 
+        loadData(); 
     }
 
     function save() { localStorage.setItem('finData_v16', JSON.stringify(data)); }
-    function backup() { const a = document.createElement('a'); a.href = 'data:text/json;charset=utf-8,'+encodeURIComponent(JSON.stringify(data)); a.download = 'backup.json'; a.click(); }
-    
+    function backup() { 
+        const a = document.createElement('a'); 
+        a.href = 'data:text/json;charset=utf-8,'+encodeURIComponent(JSON.stringify(data)); 
+        a.download = 'backup_J&M.json'; 
+        a.click(); 
+    }
     function restoreSmart(input) {
         const fr = new FileReader();
         fr.onload = (e) => {
-            try { const json = JSON.parse(e.target.result);
-                if(json.txs && json.concepts) { data = json; } 
-                else if(json.transactions) { /* Conversión Legacy igual que en móvil */
-                    if(confirm("Backup antiguo detectado. ¿Convertir?")) {
-                         data.txs = json.transactions.map(t => ({ id: t.id||Date.now(), date: t.date, amount: Math.abs(t.amount), type: t.amount<0?'exp':'inc', cat: t.category, desc: t.text||'Sin desc', exec: t.executed!==false }));
-                    } else return;
-                }
-                save(); location.reload();
+            try { 
+                const json = JSON.parse(e.target.result);
+                // Lógica de compatibilidad V14-V16
+                if(json.txs) { data = json; save(); location.reload(); }
+                else { alert("Formato de backup no reconocido"); }
             } catch(err) { alert("Error al leer archivo"); }
-        }; fr.readAsText(input.files[0]); input.value = '';
+        }; 
+        fr.readAsText(input.files[0]); input.value = '';
     }
-
 </script>
 </body>
 </html>
