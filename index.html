@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>J&M | Finance Pro v23</title>
+    <title>J&M Finance Pro | V24</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -20,12 +20,10 @@
         * { box-sizing: border-box; outline: none; }
         body { font-family: 'Inter', sans-serif; background-color: var(--bg-app); color: var(--text-1); margin: 0; height: 100vh; overflow: hidden; display: flex; }
 
-        /* LAYOUT */
         .app-container { display: grid; grid-template-columns: 280px 1fr; width: 100%; height: 100%; }
         .sidebar { background: var(--surface); border-right: 1px solid var(--border); padding: 20px; display: flex; flex-direction: column; gap: 16px; overflow-y: auto; }
         .brand { font-size: 16px; font-weight: 800; color: var(--primary); display: flex; align-items: center; gap: 8px; padding-bottom: 16px; border-bottom: 1px solid var(--border); }
 
-        /* FORM */
         .form-group { margin-bottom: 12px; }
         label { display: block; font-size: 10px; font-weight: 700; color: var(--text-2); text-transform: uppercase; margin-bottom: 4px; }
         input, select { width: 100%; height: 36px; padding: 0 10px; border: 1px solid var(--border); border-radius: var(--r-input); background: #F1F5F9; font-size: 13px; }
@@ -33,14 +31,12 @@
         .btn-primary { width: 100%; height: 40px; background: var(--primary); color: white; border: none; border-radius: var(--r-input); font-weight: 600; cursor: pointer; margin-top: 8px; }
         .btn-sec { width: 100%; height: 36px; background: white; color: var(--text-2); border: 1px solid var(--border); border-radius: var(--r-input); font-size: 12px; cursor: pointer; }
 
-        /* MAIN AREA */
         .main-area { padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 20px; }
         .top-header { display: flex; justify-content: space-between; align-items: center; background: var(--surface); padding: 10px 16px; border-radius: var(--r-card); border: 1px solid var(--border); }
         .month-selector { display: flex; align-items: center; gap: 10px; position: relative; }
         .month-display { font-weight: 800; font-size: 14px; text-transform: uppercase; position: relative; }
         #dateInput { position: absolute; inset:0; opacity:0; cursor:pointer; }
         
-        /* DASHBOARD GRID */
         .dashboard-grid { display: grid; grid-template-columns: 3fr 1fr; gap: 20px; flex: 1; min-height: 0; }
         .t-panel { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r-card); display: flex; flex-direction: column; height: 100%; overflow: hidden; }
         .t-head { display: flex; border-bottom: 1px solid var(--border); font-size: 11px; font-weight: 800; color: white; text-transform: uppercase; }
@@ -58,7 +54,6 @@
         .t-row:hover .c-btn { opacity: 1; }
         .t-total { padding: 10px; text-align: right; font-weight: 800; font-size: 13px; background: #F8FAFC; border-top: 1px solid var(--border); }
 
-        /* SUMMARY */
         .summary-column { display: flex; flex-direction: column; gap: 16px; }
         .summary-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r-card); padding: 16px; display: flex; flex-direction: column; }
         .balance-card.pos { background: var(--success-light); border-color: #BBF7D0; }
@@ -79,14 +74,14 @@
             <div class="form-group"><label>Monto</label><input type="number" id="fAmount" placeholder="0.00" step="0.01" required></div>
             <div class="form-group"><label>Tipo</label><select id="fType" onchange="renderCats()"><option value="exp">🔴 Gasto</option><option value="inc">🟢 Ingreso</option></select></div>
             <div class="form-group"><label>Categoría</label><select id="fCat" onchange="renderConcepts()" required></select></div>
-            <div class="form-group"><label>Concepto</label><select id="fConcept" onchange="checkNewConcept()" required></select><input type="text" id="fConceptCustom" placeholder="Escribir nuevo..." style="display:none; margin-top:5px;"></div>
-            <div style="display:flex; align-items:center; gap:6px; margin-bottom:12px; font-size:11px;"><input type="checkbox" id="fExec" checked style="width:14px; height:14px; margin:0;"><label for="fExec" style="margin:0; cursor:pointer;">Ya pagado/cobrado</label></div>
+            <div class="form-group"><label>Concepto</label><select id="fConcept" onchange="checkNewConcept()" required></select><input type="text" id="fConceptCustom" placeholder="Nuevo..." style="display:none; margin-top:5px;"></div>
+            <div style="display:flex; align-items:center; gap:6px; margin-bottom:12px; font-size:11px;"><input type="checkbox" id="fExec" checked style="width:14px; height:14px; margin:0;"><label for="fExec" style="margin:0; cursor:pointer;">Pagado</label></div>
             <button type="submit" id="btnSave" class="btn-primary">Guardar</button>
-            <button type="button" id="btnCancel" onclick="resetForm()" class="btn-sec" style="display:none; border-color:var(--danger); color:var(--danger); margin-top:8px;">Cancelar</button>
+            <button type="button" id="btnCancel" onclick="resetForm()" class="btn-sec" style="display:none; border-color:var(--danger); color:var(--danger);">Cancelar</button>
         </form>
         <div class="tools">
-            <button class="btn-sec" onclick="backup()"><i class="fas fa-download"></i> Backup</button>
-            <button class="btn-sec" onclick="document.getElementById('fileIn').click()"><i class="fas fa-upload"></i> Restaurar</button>
+            <button class="btn-sec" onclick="backup()">Backup</button>
+            <button class="btn-sec" onclick="document.getElementById('fileIn').click()">Restaurar</button>
             <input type="file" id="fileIn" hidden onchange="restoreSmart(this)">
         </div>
     </aside>
@@ -95,11 +90,11 @@
         <header class="top-header">
             <div class="month-selector">
                 <button style="border:none; background:none; cursor:pointer;" onclick="addMonth(-1)"><i class="fas fa-chevron-left"></i></button>
-                <span class="month-display" id="monthTxt">ENERO 2026</span>
+                <span class="month-display" id="monthTxt">...</span>
                 <input type="month" id="dateInput" onchange="loadData()">
                 <button style="border:none; background:none; cursor:pointer;" onclick="addMonth(1)"><i class="fas fa-chevron-right"></i></button>
             </div>
-            <div style="font-size:12px; font-weight:600;">USD REF: $<input type="number" id="usdRate" value="1200" onchange="updateCalculations()" style="width:60px; border:none; background:#F1F5F9; font-weight:700; text-align:right; border-radius:4px;"></div>
+            <div style="font-size:12px;">USD REF: $<input type="number" id="usdRate" value="1200" onchange="loadData()" style="width:60px; border:none; background:#F1F5F9; font-weight:700; text-align:right;"></div>
         </header>
 
         <section class="dashboard-grid">
@@ -111,36 +106,24 @@
                 </div>
             </div>
             <div class="summary-column">
-                <div class="summary-card balance-card" id="cardBal"><span style="font-size:11px; font-weight:700; text-transform:uppercase; opacity:0.7;">Balance Total</span><span class="bal-amount" id="kpiBal">$0</span><span id="kpiUsd" style="font-size:13px; font-weight:600; color:var(--primary);">US$ 0.00</span></div>
+                <div class="summary-card balance-card" id="cardBal"><span class="bal-amount" id="kpiBal">$0</span><span id="kpiUsd" style="font-size:13px; font-weight:600; color:var(--primary);">US$ 0.00</span></div>
                 <div class="chart-box"><canvas id="myChart"></canvas></div>
-                <div class="summary-card" style="gap:10px; padding:10px;"><div class="kpi-row-mini"><span>Ingresos</span><span id="kpiInc" style="color:var(--success); font-weight:700;">$0</span></div><div class="kpi-row-mini"><span>Egresos</span><span id="kpiExp" style="color:var(--danger); font-weight:700;">$0</span></div></div>
+                <div class="kpi-row-mini"><span>IN</span><span id="kpiInc" style="color:var(--success);">$0</span></div>
+                <div class="kpi-row-mini"><span>OUT</span><span id="kpiExp" style="color:var(--danger);">$0</span></div>
             </div>
         </section>
     </main>
 </div>
 
 <script>
-    const defData = { 
-        txs: [], 
-        cats: { exp:['Esenciales','Deudas','Personal','Ahorro'], inc:['Sueldo','Ventas','Varios'] },
-        concepts: {
-            "Esenciales": ["Alquiler", "Luz/Gas", "Supermercado", "Internet", "Celular"],
-            "Deudas": ["Tarjeta Visa", "Tarjeta Master", "Prestamo"],
-            "Personal": ["Salidas", "Ropa", "Gym", "Regalos"],
-            "Ahorro": ["Compra Dólar", "Fondo Inversión"],
-            "Sueldo": ["Javier", "Mary"],
-            "Ventas": ["Venta 1", "Venta 2"],
-            "Varios": ["Devolución", "Otros"]
-        }
-    };
+    const defData = { txs: [], cats: { exp:['Esenciales','Deudas','Personal','Ahorro'], inc:['Sueldo','Ventas','Varios'] }, concepts: { "Esenciales": ["Alquiler", "Luz/Gas", "Supermercado", "Internet", "Celular"], "Deudas": ["Tarjeta Visa", "Tarjeta Master", "Prestamo"], "Personal": ["Salidas", "Ropa", "Gym", "Regalos"], "Ahorro": ["Compra Dólar", "Fondo Inversión"], "Sueldo": ["Javier", "Mary"], "Ventas": ["Venta 1", "Venta 2"], "Varios": ["Devolución", "Otros"] } };
 
-    // INTENTO DE CARGA DESDE MULTIPLES VERSIONES POSIBLES
+    // CARGA DE DATOS MULTI-VERSIÓN
     let data = JSON.parse(localStorage.getItem('finData_v16')) || 
                JSON.parse(localStorage.getItem('finData_v15')) || 
                JSON.parse(localStorage.getItem('finData_v14')) || defData;
 
-    let editId = null;
-    let chartInstance = null;
+    let editId = null, chartInstance = null;
 
     window.onload = () => {
         const d = new Date();
@@ -160,116 +143,74 @@
     }
 
     function renderTView(txs) {
-        const incList = document.getElementById('t-list-inc');
-        const expList = document.getElementById('t-list-exp');
+        const incList = document.getElementById('t-list-inc'), expList = document.getElementById('t-list-exp');
         incList.innerHTML = ''; expList.innerHTML = '';
         txs.forEach(t => {
-            const day = t.date.split('-')[2];
-            const div = document.createElement('div');
+            const day = t.date.split('-')[2], div = document.createElement('div');
             div.className = 't-row'; div.onclick = (e) => { if(!e.target.closest('.c-btn')) edit(t.id); };
-            div.innerHTML = `<div class="c-date">${day}</div><div class="c-cat">${t.cat}</div><div class="c-desc">${t.desc}${!t.exec?' <i class="fas fa-clock" style="color:var(--warning); font-size:10px;"></i>':''}</div><div class="c-amt">$${Math.abs(t.amount).toLocaleString()}</div><button class="c-btn" onclick="del(${t.id})"><i class="fas fa-trash"></i></button>`;
-            if(t.type === 'inc') incList.appendChild(div); else expList.appendChild(div);
+            div.innerHTML = `<div class="c-date">${day}</div><div class="c-cat">${t.cat}</div><div class="c-desc">${t.desc}</div><div class="c-amt">$${Math.abs(t.amount).toLocaleString()}</div><button class="c-btn" onclick="del(${t.id})"><i class="fas fa-trash"></i></button>`;
+            (t.type === 'inc' ? incList : expList).appendChild(div);
         });
     }
 
     function renderChart(txs) {
-        const ctx = document.getElementById('myChart');
-        if(chartInstance) chartInstance.destroy();
-        const exps = txs.filter(t => t.type === 'exp');
-        const dataMap = exps.reduce((a,t) => { a[t.cat] = (a[t.cat]||0)+ +t.amount; return a; }, {});
+        const ctx = document.getElementById('myChart'); if(chartInstance) chartInstance.destroy();
+        const exps = txs.filter(t => t.type === 'exp'), dataMap = exps.reduce((a,t) => { a[t.cat] = (a[t.cat]||0)+ +t.amount; return a; }, {});
         chartInstance = new Chart(ctx, { type: 'doughnut', data: { labels: Object.keys(dataMap), datasets: [{ data: Object.values(dataMap), backgroundColor: ['#EF4444','#F59E0B','#3B82F6','#10B981','#8B5CF6','#EC4899'], borderWidth: 0 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } } });
     }
 
     function calcKPIs(txs) {
-        let inc = 0, exp = 0;
-        txs.forEach(t => { if(t.type === 'inc') inc += Math.abs(t.amount); else exp += Math.abs(t.amount); });
-        const bal = inc - exp;
-        const rate = parseFloat(document.getElementById('usdRate').value) || 1200;
-        localStorage.setItem('usdRate', rate);
+        let inc = 0, exp = 0; txs.forEach(t => { if(t.type === 'inc') inc += Math.abs(t.amount); else exp += Math.abs(t.amount); });
+        const bal = inc - exp, rate = parseFloat(document.getElementById('usdRate').value) || 1200;
         document.getElementById('kpiInc').innerText = `$${inc.toLocaleString()}`;
         document.getElementById('kpiExp').innerText = `$${exp.toLocaleString()}`;
         document.getElementById('kpiBal').innerText = `$${bal.toLocaleString()}`;
         document.getElementById('kpiUsd').innerText = `US$ ${(bal/rate).toFixed(2)}`;
         document.getElementById('total-inc').innerText = `$${inc.toLocaleString()}`;
         document.getElementById('total-exp').innerText = `$${exp.toLocaleString()}`;
-        const c = document.getElementById('cardBal'); c.className = 'summary-card balance-card';
-        if(bal >= 0) { c.classList.add('pos'); document.getElementById('kpiBal').style.color = 'var(--success)'; }
-        else { c.classList.add('neg'); document.getElementById('kpiBal').style.color = 'var(--danger)'; }
+        const c = document.getElementById('cardBal'); c.className = 'summary-card balance-card ' + (bal >= 0 ? 'pos' : 'neg');
+        document.getElementById('kpiBal').style.color = (bal >= 0 ? 'var(--success)' : 'var(--danger)');
     }
 
     function save() { localStorage.setItem('finData_v16', JSON.stringify(data)); }
     function backup() { const a=document.createElement('a'); a.href='data:text/json;charset=utf-8,'+encodeURIComponent(JSON.stringify(data)); a.download='backup_J&M.json'; a.click(); }
     
-    // RESTAURACION MEJORADA
+    // RESTAURACIÓN TOTALMENTE PERMISIVA
     function restoreSmart(input) {
-        const fr=new FileReader();
-        fr.onload=(e)=>{
+        const fr = new FileReader();
+        fr.onload = (e) => {
             try {
-                const json=JSON.parse(e.target.result);
-                // Si el archivo tiene la estructura correcta (txs sea array)
-                if(json.txs && Array.isArray(json.txs)) {
-                    data = json;
+                const json = JSON.parse(e.target.result);
+                // Si el archivo tiene txs O transactions, lo rescatamos
+                const txsToRestore = json.txs || json.transactions || null;
+                
+                if (txsToRestore && Array.isArray(txsToRestore)) {
+                    data.txs = txsToRestore;
+                    // Si el backup tiene sus propias categorias/conceptos, los traemos también
+                    if (json.cats) data.cats = json.cats;
+                    if (json.concepts) data.concepts = json.concepts;
+                    
                     save();
-                    alert("¡Datos restaurados con éxito!");
+                    alert("¡RESTAURACIÓN COMPLETA!");
                     location.reload();
                 } else {
-                    alert("El archivo no parece ser un backup válido.");
+                    alert("ERROR: El archivo no tiene movimientos reconocibles.");
                 }
-            } catch(err){
-                alert("Error al leer el archivo.");
+            } catch(err) {
+                alert("ERROR CRÍTICO: El archivo no es un JSON válido.");
             }
         };
         fr.readAsText(input.files[0]);
-        input.value='';
     }
 
-    function renderCats() {
-        const sel = document.getElementById('fCat'); sel.innerHTML = '';
-        (data.cats[document.getElementById('fType').value] || []).forEach(c => sel.add(new Option(c,c))); 
-        sel.add(new Option('+ Nueva', 'new_cat')); renderConcepts();
-    }
-    function renderConcepts() {
-        const cat = document.getElementById('fCat').value;
-        if(cat === 'new_cat') { 
-            const n = prompt('Nueva Categoría:'); 
-            if(n) { data.cats[document.getElementById('fType').value].push(n); data.concepts[n]=[]; save(); renderCats(); document.getElementById('fCat').value = n; renderConcepts(); } 
-            return;
-        }
-        const sel = document.getElementById('fConcept'); sel.innerHTML = '';
-        (data.concepts[cat] || []).forEach(c => sel.add(new Option(c,c)));
-        sel.add(new Option('+ Nuevo', 'new_con'));
-        checkNewConcept();
-    }
-    function checkNewConcept() {
-        const val = document.getElementById('fConcept').value;
-        const customInp = document.getElementById('fConceptCustom');
-        customInp.style.display = (val === 'new_con') ? 'block' : 'none';
-        if(val === 'new_con') customInp.focus();
-    }
-    document.getElementById('txForm').onsubmit = (e) => {
-        e.preventDefault();
-        let finalDesc = document.getElementById('fConcept').value;
-        const cat = document.getElementById('fCat').value;
-        if(finalDesc === 'new_con') {
-            finalDesc = document.getElementById('fConceptCustom').value;
-            if(!data.concepts[cat]) data.concepts[cat] = [];
-            if(!data.concepts[cat].includes(finalDesc)) { data.concepts[cat].push(finalDesc); }
-        }
-        const tx = { id: editId || Date.now(), date: document.getElementById('fDate').value, amount: Math.abs(document.getElementById('fAmount').value), type: document.getElementById('fType').value, cat: cat, desc: finalDesc, exec: document.getElementById('fExec').checked };
-        if(editId) { const idx = data.txs.findIndex(t => t.id == editId); if(idx!==-1) data.txs[idx]=tx; } 
-        else { data.txs.push(tx); }
-        save(); resetForm(); loadData();
-    };
-    function edit(id) {
-        const t = data.txs.find(x => x.id == id); if(!t) return;
-        editId = id; document.getElementById('fDate').value = t.date; document.getElementById('fAmount').value = t.amount; document.getElementById('fType').value = t.type;
-        renderCats(); document.getElementById('fCat').value = t.cat; renderConcepts(); document.getElementById('fConcept').value = t.desc;
-        document.getElementById('fExec').checked = t.exec; document.getElementById('btnSave').innerText = 'ACTUALIZAR'; document.getElementById('btnCancel').style.display = 'block';
-    }
+    function renderCats() { const sel = document.getElementById('fCat'); sel.innerHTML = ''; (data.cats[document.getElementById('fType').value] || []).forEach(c => sel.add(new Option(c,c))); sel.add(new Option('+ Nueva', 'new_cat')); renderConcepts(); }
+    function renderConcepts() { const cat = document.getElementById('fCat').value; if(cat === 'new_cat') { const n = prompt('Categoría:'); if(n) { data.cats[document.getElementById('fType').value].push(n); data.concepts[n]=[]; save(); renderCats(); document.getElementById('fCat').value = n; renderConcepts(); } return; } const sel = document.getElementById('fConcept'); sel.innerHTML = ''; (data.concepts[cat] || []).forEach(c => sel.add(new Option(c,c))); sel.add(new Option('+ Nuevo', 'new_con')); checkNewConcept(); }
+    function checkNewConcept() { const val = document.getElementById('fConcept').value, customInp = document.getElementById('fConceptCustom'); customInp.style.display = (val === 'new_con') ? 'block' : 'none'; if(val === 'new_con') customInp.focus(); }
+    document.getElementById('txForm').onsubmit = (e) => { e.preventDefault(); let finalDesc = document.getElementById('fConcept').value; const cat = document.getElementById('fCat').value; if(finalDesc === 'new_con') { finalDesc = document.getElementById('fConceptCustom').value; if(!data.concepts[cat]) data.concepts[cat] = []; if(!data.concepts[cat].includes(finalDesc)) { data.concepts[cat].push(finalDesc); } } const tx = { id: editId || Date.now(), date: document.getElementById('fDate').value, amount: Math.abs(document.getElementById('fAmount').value), type: document.getElementById('fType').value, cat: cat, desc: finalDesc, exec: document.getElementById('fExec').checked }; if(editId) { const idx = data.txs.findIndex(t => t.id == editId); if(idx!==-1) data.txs[idx]=tx; } else { data.txs.push(tx); } save(); resetForm(); loadData(); };
+    function edit(id) { const t = data.txs.find(x => x.id == id); if(!t) return; editId = id; document.getElementById('fDate').value = t.date; document.getElementById('fAmount').value = t.amount; document.getElementById('fType').value = t.type; renderCats(); document.getElementById('fCat').value = t.cat; renderConcepts(); if(!document.getElementById('fConcept').querySelector(`option[value="${t.desc}"]`)) { const opt = new Option(t.desc, t.desc); document.getElementById('fConcept').add(opt, 0); } document.getElementById('fConcept').value = t.desc; document.getElementById('fExec').checked = t.exec; document.getElementById('btnSave').innerText = 'ACTUALIZAR'; document.getElementById('btnCancel').style.display = 'block'; }
     function resetForm() { editId = null; document.getElementById('txForm').reset(); document.getElementById('fDate').value = new Date().toISOString().split('T')[0]; document.getElementById('btnSave').innerText = 'Guardar'; document.getElementById('btnCancel').style.display = 'none'; }
     function del(id) { if(confirm("¿Eliminar?")) { data.txs = data.txs.filter(t => t.id != id); save(); loadData(); } }
     function addMonth(n) { const inp=document.getElementById('dateInput'); let [y,m]=inp.value.split('-'); const d=new Date(y,m-1+n,1); inp.value=`${d.getFullYear()}-${(d.getMonth()+1).toString().padStart(2,'0')}`; loadData(); }
-    function updateCalculations() { loadData(); }
 </script>
 </body>
 </html>
