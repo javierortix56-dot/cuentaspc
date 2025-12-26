@@ -3,18 +3,12 @@ function loadData() {
         const [y, m] = ym.split('-');
         document.getElementById('monthTxt').innerText = new Date(y, m-1).toLocaleString('es-ES', { month:'long', year:'numeric' }).toUpperCase();
         
-        // CORRECCIÓN DE ORDENAMIENTO:
-        currentTxs = (data.txs || [])
-            .filter(t => t.date.startsWith(ym))
-            .sort((a,b) => {
-                // 1. Ordenar por fecha (Ascendente: del día 1 al 31)
-                const dateA = new Date(a.date);
-                const dateB = new Date(b.date);
-                if (dateA - dateB !== 0) return dateA - dateB;
-                
-                // 2. Si la fecha es igual, ordenar por orden de creación (para que no salten)
-                return a.id - b.id; 
-            });
+        currentTxs = (data.txs || []).filter(t => t.date.startsWith(ym)).sort((a,b) => {
+            const dateA = new Date(a.date);
+            const dateB = new Date(b.date);
+            if (dateA - dateB !== 0) return dateA - dateB;
+            return a.id - b.id; 
+        });
         
         renderTView(currentTxs);
         renderChart(currentTxs);
