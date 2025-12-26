@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>J&M Desktop T-View</title>
+    <title>J&M Desktop T-View Fixed</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -140,15 +140,13 @@
         <div class="t-view-container">
             <div class="t-panel">
                 <div class="t-header inc">Ingresos</div>
-                <div class="t-list" id="list-inc">
-                    </div>
+                <div class="t-list" id="list-inc"></div>
                 <div class="t-footer total-inc" id="total-inc">$0</div>
             </div>
 
             <div class="t-panel">
                 <div class="t-header exp">Egresos</div>
-                <div class="t-list" id="list-exp">
-                    </div>
+                <div class="t-list" id="list-exp"></div>
                 <div class="t-footer total-exp" id="total-exp">$0</div>
             </div>
         </div>
@@ -370,7 +368,6 @@
         setType(t.type);
         document.getElementById('fCat').value = t.cat; renderConcepts();
         
-        // Fix legacy
         if(!document.getElementById('fConcept').querySelector(`option[value="${t.desc}"]`)) {
             document.getElementById('fConcept').add(new Option(t.desc, t.desc), 0);
         }
@@ -431,7 +428,7 @@
         });
     }
 
-    // --- SISTEMA ---
+    // --- SISTEMA Y RESTAURACIÓN INTELIGENTE (CORREGIDO) ---
     function addMonth(n) {
         const i = document.getElementById('dateInput');
         let [y,m] = i.value.split('-').map(Number);
@@ -447,14 +444,62 @@
         a.download=`backup_JM_${new Date().toISOString().slice(0,10)}.json`; a.click(); 
     }
     
+    // AQUÍ ESTÁ LA MAGIA QUE LEE TU ARCHIVO
     function restoreSmart(input) {
         const fr = new FileReader();
         fr.onload = (e) => {
             try {
                 const json = JSON.parse(e.target.result);
-                if(json.txs) { data = json; save(); alert('Restaurado!'); location.reload(); }
-                else { alert('Formato inválido'); }
-            } catch(e) { alert('Error de archivo'); }
+
+                // DETECTOR: ¿ES TU BACKUP ANTIGUO? (Tiene 'transactions' y 'appData')
+                if (json.appData && json.transactions) {
+                    
+                    // 1. Mapear Categorías
+                    const newCats = {
+                        inc: json.appData.categories.income || [],
+                        exp: json.appData.categories.expense || []
+                    };
+                    
+                    // 2. Mapear Conceptos
+                    const newConcepts = json.appData.concepts || {};
+                    
+                    // 3. Traducir Transacciones
+                    const newTxs = json.transactions.map(t => {
+                        const isIncome = t.amount >= 0; 
+                        // Regla especial: Si la categoría dice "Ingreso...", forzar tipo 'inc'
+                        const derivedType = (isIncome || (t.category && t.category.toLowerCase().includes('ingreso'))) ? 'inc' : 'exp';
+                        
+                        return {
+                            id: t.id,
+                            date: t.date,
+                            amount: Math.abs(t.amount), // Convertir a positivo absoluto
+                            type: derivedType,
+                            cat: t.category,
+                            desc: t.text, // Mapear 'text' a 'desc'
+                            exec: t.executed !== false // Si no existe executed, asumir true
+                        };
+                    });
+
+                    data = { txs: newTxs, cats: newCats, concepts: newConcepts };
+                    save();
+                    alert("¡Backup Restaurado y Convertido con éxito!");
+                    location.reload();
+                    return;
+                }
+
+                // FORMATO NATIVO DE ESTA APP (txs)
+                if(json.txs) { 
+                    data = json; 
+                    save(); 
+                    alert('¡Restaurado!'); 
+                    location.reload(); 
+                }
+                else { alert('Formato inválido: El archivo no tiene movimientos reconocibles.'); }
+
+            } catch(e) { 
+                console.error(e);
+                alert('Error crítico al leer el archivo JSON.'); 
+            }
         };
         fr.readAsText(input.files[0]); input.value='';
     }
