@@ -3,19 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>J&M Desktop T-View Fixed</title>
+    <title>J&M Desktop Visual Fix</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
         :root {
-            --bg-app: #F1F5F9; --surface: #FFFFFF; --border: #E2E8F0;
-            --text-main: #0F172A; --text-muted: #64748B;
-            --primary: #2563EB; --primary-hover: #1D4ED8;
-            --success: #10B981; --success-light: #DCFCE7;
-            --danger: #EF4444; --danger-light: #FEE2E2;
-            --warning: #F59E0B; --radius: 12px;
+            --bg-app: #F8FAFC; 
+            --surface: #FFFFFF; 
+            --border: #E2E8F0;
+            --text-main: #1E293B; 
+            --text-muted: #64748B;
+            --primary: #2563EB; 
+            --primary-hover: #1D4ED8;
+            --success: #16A34A; /* Verde más fuerte */
+            --danger: #DC2626;  /* Rojo más fuerte */
+            --radius: 12px;
         }
 
         * { box-sizing: border-box; outline: none; }
@@ -25,74 +29,84 @@
             color: var(--text-main); margin: 0; height: 100vh; overflow: hidden; font-size: 13px; 
         }
 
-        /* LAYOUT: 3 COLUMNAS */
-        .app-grid { display: grid; grid-template-columns: 250px 1fr 320px; height: 100vh; width: 100vw; }
+        /* LAYOUT */
+        .app-grid { display: grid; grid-template-columns: 260px 1fr 340px; height: 100vh; width: 100vw; }
 
-        /* --- SIDEBAR (IZQUIERDA) --- */
-        .sidebar { background: var(--surface); border-right: 1px solid var(--border); display: flex; flex-direction: column; padding: 20px; gap: 20px; z-index: 10; }
-        .brand { font-size: 18px; font-weight: 800; color: var(--primary); display: flex; align-items: center; gap: 10px; padding-bottom: 20px; border-bottom: 1px solid var(--border); }
+        /* --- SIDEBAR --- */
+        .sidebar { background: var(--surface); border-right: 1px solid var(--border); display: flex; flex-direction: column; padding: 24px; gap: 20px; z-index: 10; }
+        .brand { font-size: 20px; font-weight: 800; color: var(--primary); display: flex; align-items: center; gap: 10px; padding-bottom: 20px; border-bottom: 1px solid var(--border); }
         
-        .stat-card { background: var(--bg-app); padding: 15px; border-radius: var(--radius); border: 1px solid var(--border); margin-bottom: 10px; }
+        .stat-card { background: #F1F5F9; padding: 20px; border-radius: var(--radius); border: 1px solid var(--border); margin-bottom: 10px; box-shadow: inset 0 2px 4px rgba(0,0,0,0.02); }
         .stat-label { font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
-        .stat-val { font-size: 20px; font-weight: 800; margin-top: 5px; letter-spacing: -0.5px; }
-        .stat-sub { font-size: 12px; color: var(--text-muted); font-weight: 500; margin-top: 2px; }
+        .stat-val { font-size: 26px; font-weight: 800; margin-top: 8px; letter-spacing: -1px; }
+        .stat-sub { font-size: 13px; color: var(--text-muted); font-weight: 500; margin-top: 4px; display:flex; align-items:center; gap:5px;}
 
-        .btn-tool { background: white; border: 1px solid var(--border); color: var(--text-muted); padding: 10px; border-radius: 8px; cursor: pointer; font-size: 12px; font-weight: 600; text-align: left; transition: 0.2s; display: flex; align-items: center; gap: 8px; }
-        .btn-tool:hover { border-color: var(--primary); color: var(--primary); background: #F8FAFC; }
+        .btn-tool { background: white; border: 1px solid var(--border); color: var(--text-muted); padding: 12px; border-radius: 8px; cursor: pointer; font-size: 12px; font-weight: 600; text-align: left; transition: 0.2s; display: flex; align-items: center; gap: 10px; }
+        .btn-tool:hover { border-color: var(--primary); color: var(--primary); background: #F8FAFC; transform: translateX(2px); }
 
-        /* --- MAIN CONTENT (CENTRO - VISTA T) --- */
-        .main-content { display: flex; flex-direction: column; overflow: hidden; background: #F8FAFC; }
+        /* --- MAIN (T-VIEW) --- */
+        .main-content { display: flex; flex-direction: column; overflow: hidden; background: var(--bg-app); }
         
-        .top-bar { background: var(--surface); padding: 15px 25px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; height: 60px; }
-        .month-ctrl { display: flex; align-items: center; gap: 10px; background: var(--bg-app); padding: 4px; border-radius: 8px; border: 1px solid var(--border); }
-        .btn-month { border: none; background: transparent; cursor: pointer; padding: 5px 12px; color: var(--text-muted); transition: 0.2s; }
-        .btn-month:hover { color: var(--primary); background: rgba(0,0,0,0.05); border-radius: 4px; }
+        .top-bar { background: var(--surface); padding: 0 30px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; height: 70px; }
+        .month-ctrl { display: flex; align-items: center; gap: 15px; background: white; padding: 6px 10px; border-radius: 10px; border: 1px solid var(--border); box-shadow: 0 1px 2px rgba(0,0,0,0.03); }
+        .btn-month { border: none; background: transparent; cursor: pointer; padding: 6px 12px; color: var(--text-muted); transition: 0.2s; font-size: 14px; }
+        .btn-month:hover { color: var(--primary); background: #F1F5F9; border-radius: 6px; }
         
-        /* CUENTA T */
-        .t-view-container { flex: 1; padding: 20px; overflow: hidden; display: flex; gap: 20px; }
-        .t-panel { flex: 1; background: var(--surface); border-radius: var(--radius); border: 1px solid var(--border); display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02); }
+        .t-view-container { flex: 1; padding: 30px; overflow: hidden; display: flex; gap: 30px; }
+        .t-panel { flex: 1; background: var(--surface); border-radius: 16px; border: 1px solid var(--border); display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 4px 20px -5px rgba(0, 0, 0, 0.05); transition: 0.2s; }
+        .t-panel:hover { box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.08); }
         
-        .t-header { padding: 12px; text-align: center; font-weight: 800; color: white; text-transform: uppercase; font-size: 12px; letter-spacing: 1px; }
+        .t-header { padding: 15px; text-align: center; font-weight: 800; color: white; text-transform: uppercase; font-size: 12px; letter-spacing: 1px; }
         .t-header.inc { background: var(--success); }
         .t-header.exp { background: var(--danger); }
         
         .t-list { flex: 1; overflow-y: auto; padding: 0; }
-        .t-row { display: flex; align-items: center; padding: 10px 15px; border-bottom: 1px solid var(--bg-app); cursor: pointer; transition: 0.1s; }
-        .t-row:hover { background: #F8FAFC; padding-left: 20px; }
+        .t-row { display: flex; align-items: center; padding: 12px 20px; border-bottom: 1px solid #F1F5F9; cursor: pointer; transition: 0.1s; }
+        .t-row:hover { background: #F8FAFC; padding-left: 25px; }
         
-        .row-date { font-weight: 700; color: var(--text-muted); font-size: 11px; width: 25px; text-align: center; }
-        .row-info { flex: 1; margin: 0 10px; overflow: hidden; }
-        .row-desc { font-weight: 600; color: var(--text-main); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .row-cat { font-size: 10px; color: var(--text-muted); text-transform: uppercase; background: var(--bg-app); padding: 2px 6px; border-radius: 4px; display: inline-block; margin-top: 2px; }
-        .row-amt { font-weight: 700; text-align: right; font-size: 13px; }
+        .row-date { font-weight: 700; color: var(--text-muted); font-size: 12px; width: 30px; text-align: center; }
+        .row-info { flex: 1; margin: 0 15px; overflow: hidden; }
+        .row-desc { font-weight: 600; color: var(--text-main); font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .row-cat { font-size: 10px; color: var(--text-muted); text-transform: uppercase; background: #F1F5F9; padding: 2px 8px; border-radius: 4px; display: inline-block; margin-top: 4px; font-weight:700; }
+        .row-amt { font-weight: 700; text-align: right; font-size: 14px; }
         
-        .t-footer { padding: 15px; text-align: right; font-weight: 800; font-size: 16px; border-top: 1px solid var(--border); background: #FDFDFD; }
+        .t-footer { padding: 20px; text-align: right; font-weight: 800; font-size: 18px; border-top: 1px solid var(--border); background: #fff; }
         .total-inc { color: var(--success); }
         .total-exp { color: var(--danger); }
 
-        /* --- INSPECTOR (DERECHA) --- */
+        /* --- INSPECTOR --- */
         .inspector { background: var(--surface); border-left: 1px solid var(--border); display: flex; flex-direction: column; overflow-y: auto; }
-        .inspector-section { padding: 25px; border-bottom: 1px solid var(--border); }
+        .inspector-section { padding: 30px; border-bottom: 1px solid var(--border); }
         
-        /* FORMULARIO */
-        .form-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-        .form-title { font-weight: 800; font-size: 14px; }
-        
-        .form-group { margin-bottom: 15px; }
-        label { display: block; font-size: 11px; font-weight: 700; color: var(--text-muted); margin-bottom: 6px; text-transform: uppercase; }
-        input, select { width: 100%; height: 40px; padding: 0 12px; border: 1px solid var(--border); border-radius: 8px; background: #F8FAFC; font-family: 'Inter'; font-size: 13px; transition: 0.2s; }
-        input:focus, select:focus { border-color: var(--primary); background: #FFF; box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1); }
-        
-        .toggle-group { display: flex; background: var(--bg-app); padding: 4px; border-radius: 8px; margin-bottom: 20px; }
-        .toggle-opt { flex: 1; border: none; background: transparent; padding: 8px; font-size: 12px; font-weight: 700; color: var(--text-muted); cursor: pointer; border-radius: 6px; transition: 0.2s; }
-        .toggle-opt.active { background: white; color: var(--text-main); box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        /* CHART CONTAINER FIX */
+        .chart-wrapper {
+            position: relative;
+            height: 200px; /* Altura fija para evitar superposición */
+            width: 100%;
+            display: flex;
+            justify-content: center;
+        }
 
-        .btn-primary { width: 100%; height: 42px; background: var(--primary); color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; margin-top: 10px; transition: 0.2s; font-size: 13px; }
-        .btn-primary:hover { background: var(--primary-hover); transform: translateY(-1px); }
+        /* FORM */
+        .form-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
+        .form-title { font-weight: 800; font-size: 16px; color: var(--text-main); }
         
-        .action-row { display: flex; gap: 10px; margin-top: 10px; }
-        .btn-sec { flex: 1; height: 36px; background: white; border: 1px solid var(--border); border-radius: 8px; font-weight: 600; font-size: 12px; color: var(--text-muted); cursor: pointer; }
-        .btn-del { color: var(--danger); border-color: var(--danger-light); background: var(--danger-light); }
+        .form-group { margin-bottom: 18px; }
+        label { display: block; font-size: 11px; font-weight: 700; color: var(--text-muted); margin-bottom: 8px; text-transform: uppercase; }
+        input, select { width: 100%; height: 44px; padding: 0 15px; border: 1px solid var(--border); border-radius: 10px; background: #F8FAFC; font-family: 'Inter'; font-size: 14px; transition: 0.2s; color: var(--text-main); }
+        input:focus, select:focus { border-color: var(--primary); background: #FFF; box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1); }
+        
+        .toggle-group { display: flex; background: #F1F5F9; padding: 5px; border-radius: 10px; margin-bottom: 25px; }
+        .toggle-opt { flex: 1; border: none; background: transparent; padding: 10px; font-size: 13px; font-weight: 600; color: var(--text-muted); cursor: pointer; border-radius: 8px; transition: 0.2s; }
+        .toggle-opt.active { background: white; color: var(--text-main); box-shadow: 0 2px 5px rgba(0,0,0,0.05); font-weight: 800; }
+
+        .btn-primary { width: 100%; height: 48px; background: var(--primary); color: white; border: none; border-radius: 10px; font-weight: 700; cursor: pointer; margin-top: 15px; transition: 0.2s; font-size: 14px; box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.2); }
+        .btn-primary:hover { background: var(--primary-hover); transform: translateY(-2px); box-shadow: 0 6px 10px -1px rgba(37, 99, 235, 0.3); }
+        
+        .action-row { display: flex; gap: 10px; margin-top: 15px; }
+        .btn-sec { flex: 1; height: 40px; background: white; border: 1px solid var(--border); border-radius: 10px; font-weight: 600; font-size: 13px; color: var(--text-muted); cursor: pointer; transition: 0.2s; }
+        .btn-sec:hover { background: #F8FAFC; color: var(--text-main); }
+        .btn-del { color: var(--danger); border-color: #FECACA; background: #FEF2F2; }
         .btn-del:hover { background: #FECACA; }
 
     </style>
@@ -102,22 +116,25 @@
 <div class="app-grid">
     
     <aside class="sidebar">
-        <div class="brand"><i class="fas fa-wallet"></i> J&M Finance <span style="font-size: 9px; background: #000; color: white; padding: 2px 5px; border-radius: 4px;">PRO</span></div>
+        <div class="brand"><i class="fas fa-wallet"></i> J&M Finance</div>
 
         <div class="stat-card">
             <div class="stat-label">Balance Neto</div>
             <div class="stat-val" id="kpiBal">$0</div>
-            <div class="stat-sub" id="kpiUsd">US$ 0.00</div>
+            <div class="stat-sub">
+                <i class="fas fa-globe-americas" style="color:#94A3B8"></i> 
+                <span id="kpiUsd">US$ 0.00</span>
+            </div>
         </div>
         
         <div style="margin-top:auto">
-            <label>Dólar Referencia</label>
+            <label>Cotización USD (Blue)</label>
             <input type="number" id="usdRate" value="1200" onchange="loadData()" style="font-weight:700; text-align:right;">
         </div>
 
-        <div style="display:flex; flex-direction:column; gap:8px; margin-top:20px;">
-            <button class="btn-tool" onclick="backup()"><i class="fas fa-download"></i> Guardar Backup</button>
-            <button class="btn-tool" onclick="document.getElementById('fileIn').click()"><i class="fas fa-upload"></i> Restaurar Backup</button>
+        <div style="display:flex; flex-direction:column; gap:10px; margin-top:20px;">
+            <button class="btn-tool" onclick="backup()"><i class="fas fa-cloud-download-alt"></i> Guardar Backup</button>
+            <button class="btn-tool" onclick="document.getElementById('fileIn').click()"><i class="fas fa-cloud-upload-alt"></i> Restaurar Backup</button>
             <input type="file" id="fileIn" hidden onchange="restoreSmart(this)">
         </div>
     </aside>
@@ -126,14 +143,14 @@
         <header class="top-bar">
             <div class="month-ctrl">
                 <button class="btn-month" onclick="addMonth(-1)"><i class="fas fa-chevron-left"></i></button>
-                <div style="font-weight:800; min-width:140px; text-align:center; text-transform:uppercase; position:relative;">
+                <div style="font-weight:800; min-width:160px; text-align:center; text-transform:uppercase; position:relative; font-size:15px; letter-spacing:0.5px; color:var(--text-main);">
                     <span id="monthTxt">...</span>
                     <input type="month" id="dateInput" onchange="loadData()" style="position:absolute; inset:0; opacity:0; cursor:pointer;">
                 </div>
                 <button class="btn-month" onclick="addMonth(1)"><i class="fas fa-chevron-right"></i></button>
             </div>
-            <div style="font-size:11px; color:var(--text-muted); font-weight:500;">
-                <i class="fas fa-columns"></i> Vista Contable (Cuenta T)
+            <div style="font-size:12px; color:var(--text-muted); font-weight:600; background:white; padding:6px 12px; border-radius:20px; border:1px solid var(--border);">
+                <i class="fas fa-columns" style="margin-right:5px; color:var(--primary);"></i> Vista Contable
             </div>
         </header>
 
@@ -153,12 +170,15 @@
     </main>
 
     <aside class="inspector">
-        <div class="inspector-section" style="height: 280px; display: flex; flex-direction: column;">
-            <div class="form-header" style="margin-bottom:10px;">
+        <div class="inspector-section" style="padding-bottom:15px;">
+            <div class="form-header" style="margin-bottom:15px;">
                 <span class="form-title">Distribución</span>
-                <button id="chartBack" onclick="renderChart(currentTxs)" style="border:none; background:none; color:var(--primary); font-size:11px; cursor:pointer; display:none;">Volver</button>
+                <button id="chartBack" onclick="renderChart(currentTxs)" style="border:none; background:none; color:var(--primary); font-size:12px; font-weight:600; cursor:pointer; display:none;">
+                    <i class="fas fa-arrow-left"></i> Volver
+                </button>
             </div>
-            <div style="flex:1; position:relative;">
+            
+            <div class="chart-wrapper">
                 <canvas id="myChart"></canvas>
             </div>
         </div>
@@ -166,7 +186,7 @@
         <div class="inspector-section" style="flex:1;">
             <div class="form-header">
                 <span class="form-title" id="formTitle">Nuevo Movimiento</span>
-                <button onclick="resetForm()" style="border:none; background:none; color:var(--text-muted); cursor:pointer;"><i class="fas fa-plus"></i></button>
+                <button onclick="resetForm()" style="border:none; background:none; color:var(--text-muted); cursor:pointer; transition:0.2s;" title="Limpiar"><i class="fas fa-eraser"></i></button>
             </div>
 
             <form id="txForm">
@@ -186,7 +206,7 @@
                     <input type="number" id="fAmount" placeholder="0.00" step="0.01" required>
                 </div>
 
-                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:15px;">
                     <div class="form-group">
                         <label>Categoría</label>
                         <select id="fCat" onchange="renderConcepts()" required></select>
@@ -196,14 +216,14 @@
                         <select id="fConcept" onchange="checkNewConcept()" required></select>
                     </div>
                 </div>
-                <input type="text" id="fConceptCustom" class="form-group" placeholder="Nombre del concepto..." style="display:none; width:100%; margin-top:-10px; margin-bottom:15px;">
+                <input type="text" id="fConceptCustom" class="form-group" placeholder="Escribe el nombre..." style="display:none; width:100%; margin-top:-10px;">
 
-                <div style="display:flex; align-items:center; gap:8px; margin-bottom:20px;">
-                    <input type="checkbox" id="fExec" checked style="width:16px; height:16px; margin:0;">
-                    <label style="margin:0; cursor:pointer; text-transform:none; color:var(--text-main);">Marcar como pagado/cobrado</label>
+                <div style="display:flex; align-items:center; gap:10px; margin-bottom:25px; padding:10px; background:#F8FAFC; border-radius:8px; border:1px solid var(--border);">
+                    <input type="checkbox" id="fExec" checked style="width:18px; height:18px; margin:0; cursor:pointer;">
+                    <label for="fExec" style="margin:0; cursor:pointer; text-transform:none; color:var(--text-main); font-weight:600;">Ya se pagó / cobró</label>
                 </div>
 
-                <button type="submit" id="btnSave" class="btn-primary">GUARDAR MOVIMIENTO</button>
+                <button type="submit" id="btnSave" class="btn-primary">GUARDAR</button>
 
                 <div class="action-row" id="editControls" style="display:none;">
                     <button type="button" class="btn-sec btn-del" onclick="del(editId)">Eliminar</button>
@@ -215,7 +235,7 @@
 </div>
 
 <script>
-    // --- DATOS Y LÓGICA (Compatible con Mobile) ---
+    // --- DATOS Y LÓGICA (INTACTOS) ---
     const defData = { 
         txs: [], 
         cats: { exp:['Esenciales','Deudas','Personal','Ahorro'], inc:['Sueldo','Ventas','Varios'] },
@@ -242,10 +262,9 @@
         
         renderTView(currentTxs);
         renderChart(currentTxs);
-        renderCats(); // Inicializar form
+        renderCats(); 
     }
 
-    // --- RENDERIZADO CUENTA T (NUEVO) ---
     function renderTView(txs) {
         const lInc = document.getElementById('list-inc');
         const lExp = document.getElementById('list-exp');
@@ -259,7 +278,6 @@
             const amount = Math.abs(t.amount);
             if(isInc) tInc += amount; else tExp += amount;
 
-            // Alerta visual de fecha
             const txDate = new Date(t.date + 'T00:00:00');
             const diffDays = Math.ceil((txDate - today) / (1000 * 60 * 60 * 24));
             const alertColor = (!t.exec && diffDays >= 0 && diffDays <= 5) ? '#EF4444' : 'var(--text-muted)';
@@ -283,15 +301,19 @@
         document.getElementById('total-inc').innerText = `$${tInc.toLocaleString()}`;
         document.getElementById('total-exp').innerText = `$${tExp.toLocaleString()}`;
         
-        // KPI Globales
+        // --- KPI Y CAMBIO DE COLOR SOLICITADO ---
         const bal = tInc - tExp;
         const rate = document.getElementById('usdRate').value;
-        document.getElementById('kpiBal').innerText = `$${bal.toLocaleString()}`;
-        document.getElementById('kpiBal').style.color = bal >= 0 ? 'var(--text-main)' : 'var(--danger)';
+        const balEl = document.getElementById('kpiBal');
+        
+        balEl.innerText = `$${bal.toLocaleString()}`;
+        // AQUÍ ESTÁ EL CAMBIO DE COLOR: Verde (Success) si es positivo, Rojo (Danger) si es negativo
+        balEl.style.color = bal >= 0 ? 'var(--success)' : 'var(--danger)'; 
+        
         document.getElementById('kpiUsd').innerText = `US$ ${(bal/rate).toFixed(2)}`;
     }
 
-    // --- FORMULARIO Y EDICIÓN ---
+    // --- FORM LOGIC ---
     function setType(t) {
         document.getElementById('fType').value = t;
         document.getElementById('typeExp').className = `toggle-opt ${t=='exp'?'active':''}`;
@@ -361,7 +383,7 @@
     function edit(id) {
         const t = data.txs.find(x => x.id == id); if(!t) return;
         editId = id;
-        document.getElementById('formTitle').innerText = 'Editar Movimiento';
+        document.getElementById('formTitle').innerText = 'Editar';
         document.getElementById('fDate').value = t.date;
         document.getElementById('fAmount').value = Math.abs(t.amount);
         document.getElementById('fExec').checked = t.exec;
@@ -382,7 +404,7 @@
         document.getElementById('formTitle').innerText = 'Nuevo Movimiento';
         document.getElementById('txForm').reset();
         document.getElementById('fDate').value = new Date().toISOString().split('T')[0];
-        document.getElementById('btnSave').innerText = 'GUARDAR MOVIMIENTO';
+        document.getElementById('btnSave').innerText = 'GUARDAR';
         document.getElementById('editControls').style.display = 'none';
         document.getElementById('fConceptCustom').style.display = 'none';
         setType('exp');
@@ -392,7 +414,7 @@
         if(confirm('¿Eliminar?')) { data.txs = data.txs.filter(x => x.id != id); save(); resetForm(); loadData(); }
     }
 
-    // --- GRÁFICO ---
+    // --- GRÁFICO (VISUAL FIX) ---
     function renderChart(txs, filterCat=null) {
         const ctx = document.getElementById('myChart');
         if(chartInstance) chartInstance.destroy();
@@ -417,18 +439,31 @@
                 datasets: [{ 
                     data: Object.values(map), 
                     backgroundColor: ['#3B82F6','#10B981','#F59E0B','#EF4444','#8B5CF6','#EC4899','#6366F1'],
-                    borderWidth: 2, borderColor: '#ffffff'
+                    borderWidth: 2, borderColor: '#ffffff',
+                    hoverOffset: 5
                 }] 
             },
             options: { 
-                responsive: true, maintainAspectRatio: false,
-                plugins: { legend: { position: 'bottom', labels: { boxWidth: 10, font: { size: 10 } } } },
+                responsive: true, 
+                maintainAspectRatio: false, /* Importante para que respete el contenedor */
+                plugins: { 
+                    legend: { 
+                        position: 'bottom', 
+                        labels: { 
+                            boxWidth: 8, /* Cajas más pequeñas */
+                            font: { size: 10, family: "'Inter', sans-serif" }, 
+                            padding: 15
+                        } 
+                    } 
+                },
+                layout: {
+                    padding: 0
+                },
                 onClick: (e,i) => { if(i.length && !filterCat) renderChart(txs, Object.keys(map)[i[0].index]); }
             }
         });
     }
 
-    // --- SISTEMA Y RESTAURACIÓN INTELIGENTE (CORREGIDO) ---
     function addMonth(n) {
         const i = document.getElementById('dateInput');
         let [y,m] = i.value.split('-').map(Number);
@@ -444,62 +479,27 @@
         a.download=`backup_JM_${new Date().toISOString().slice(0,10)}.json`; a.click(); 
     }
     
-    // AQUÍ ESTÁ LA MAGIA QUE LEE TU ARCHIVO
+    // --- LÓGICA DE LECTURA DE BACKUP (INTACTA) ---
     function restoreSmart(input) {
         const fr = new FileReader();
         fr.onload = (e) => {
             try {
                 const json = JSON.parse(e.target.result);
-
-                // DETECTOR: ¿ES TU BACKUP ANTIGUO? (Tiene 'transactions' y 'appData')
                 if (json.appData && json.transactions) {
-                    
-                    // 1. Mapear Categorías
-                    const newCats = {
-                        inc: json.appData.categories.income || [],
-                        exp: json.appData.categories.expense || []
-                    };
-                    
-                    // 2. Mapear Conceptos
+                    const newCats = { inc: json.appData.categories.income || [], exp: json.appData.categories.expense || [] };
                     const newConcepts = json.appData.concepts || {};
-                    
-                    // 3. Traducir Transacciones
                     const newTxs = json.transactions.map(t => {
                         const isIncome = t.amount >= 0; 
-                        // Regla especial: Si la categoría dice "Ingreso...", forzar tipo 'inc'
                         const derivedType = (isIncome || (t.category && t.category.toLowerCase().includes('ingreso'))) ? 'inc' : 'exp';
-                        
-                        return {
-                            id: t.id,
-                            date: t.date,
-                            amount: Math.abs(t.amount), // Convertir a positivo absoluto
-                            type: derivedType,
-                            cat: t.category,
-                            desc: t.text, // Mapear 'text' a 'desc'
-                            exec: t.executed !== false // Si no existe executed, asumir true
-                        };
+                        return { id: t.id, date: t.date, amount: Math.abs(t.amount), type: derivedType, cat: t.category, desc: t.text, exec: t.executed !== false };
                     });
-
                     data = { txs: newTxs, cats: newCats, concepts: newConcepts };
-                    save();
-                    alert("¡Backup Restaurado y Convertido con éxito!");
-                    location.reload();
+                    save(); alert("¡Backup Convertido y Restaurado!"); location.reload();
                     return;
                 }
-
-                // FORMATO NATIVO DE ESTA APP (txs)
-                if(json.txs) { 
-                    data = json; 
-                    save(); 
-                    alert('¡Restaurado!'); 
-                    location.reload(); 
-                }
-                else { alert('Formato inválido: El archivo no tiene movimientos reconocibles.'); }
-
-            } catch(e) { 
-                console.error(e);
-                alert('Error crítico al leer el archivo JSON.'); 
-            }
+                if(json.txs) { data = json; save(); alert('¡Restaurado!'); location.reload(); }
+                else { alert('Formato inválido: Archivo desconocido.'); }
+            } catch(e) { alert('Error crítico al leer archivo.'); }
         };
         fr.readAsText(input.files[0]); input.value='';
     }
