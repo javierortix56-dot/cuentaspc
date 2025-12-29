@@ -40,12 +40,25 @@
         .brand { font-size: 20px; font-weight: 900; color: var(--text-main); display: flex; align-items: center; gap: 10px; margin-bottom: 40px; }
         .brand i { color: var(--success); }
 
+        /* --- KPI BOX CORREGIDO PARA NÚMEROS LARGOS --- */
         .kpi-box {
             background: var(--bg-body); border-radius: 12px; padding: 20px; border: 1px solid var(--border);
             margin-bottom: 20px; text-align: center;
+            /* Container Query: Permite que el hijo sepa el ancho del padre */
+            container-type: inline-size; 
         }
         .kpi-title { font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
-        .kpi-value { font-size: 28px; font-weight: 800; color: var(--text-main); margin: 5px 0; }
+        
+        .kpi-value { 
+            /* Fuente dinámica: Min 18px, Ideal 13% del contenedor, Max 28px */
+            font-size: clamp(18px, 13cqw, 28px); 
+            font-weight: 800; 
+            color: var(--text-main); 
+            margin: 5px 0; 
+            overflow-wrap: break-word; /* Evita desborde si es gigantesco */
+            line-height: 1.1;
+        }
+        
         .kpi-sub { font-size: 13px; font-weight: 600; color: var(--text-muted); display: flex; justify-content: center; gap: 5px; }
         
         .nav-menu { flex: 1; display: flex; flex-direction: column; gap: 5px; }
@@ -165,7 +178,7 @@
 
         /* --- RESPONSIVE --- */
         @media (max-width: 1100px) {
-            .tools-panel { display: none; } /* En pantallas medianas ocultar panel derecho (puedes añadir toggle) */
+            .tools-panel { display: none; } /* En pantallas medianas ocultar panel derecho */
         }
     </style>
 </head>
@@ -303,7 +316,6 @@
 <script>
     // --- LÓGICA COMPARTIDA V33 (COMPATIBILIDAD TOTAL) ---
     const defData = { txs: [], cats: { exp:['Esenciales','Deudas','Personal','Ahorro'], inc:['Sueldo','Ventas','Varios'] }, concepts: { "Esenciales": ["Alquiler", "Luz/Gas", "Supermercado"], "Deudas": ["Tarjeta Visa"], "Sueldo": ["Javier", "Mary"] } };
-    // Usamos LA MISMA key que la versión móvil
     let data = JSON.parse(localStorage.getItem('finData_v16')) || defData;
     let editId = null, chartInstance = null, currentTxs = [];
 
