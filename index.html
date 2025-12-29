@@ -274,10 +274,10 @@
 
 <script>
     // URL DE APPS SCRIPT
-    const API_URL = "https://script.google.com/macros/s/AKfycbxEni9GJ4gxmbhmNsbzoYxS_SfhcqrqsXj4zh93-qWly5i2R4jwvgJ8L25GcU3h3Bkh/exec";
+    const API_URL = "https://script.google.com/macros/s/AKfycbxEni9GJ4gxmbhmNsbzoYxS_SfhcorqsXj4zh93-qWIy5i2R4jwvgJ8L25GcU3h3Bkh/exec";
 
     const defData = { txs: [], cats: { exp:['Esenciales','Deudas','Personal','Ahorro'], inc:['Sueldo','Ventas','Varios'] }, concepts: { "Esenciales": ["Alquiler", "Luz/Gas", "Supermercado"], "Deudas": ["Tarjeta Visa"], "Sueldo": ["Javier", "Mary"] } };
-    let data = defData; // Inicio vacío
+    let data = defData; // Iniciamos vacío hasta cargar de nube
     let editId = null, chartInstance = null, currentTxs = [], currentChartFilter = null;
 
     window.onload = () => {
