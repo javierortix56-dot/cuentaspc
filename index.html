@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>J&M Financial V40</title>
+    <title>J&M Financial V41 (Filtros)</title>
     
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -140,14 +140,32 @@
             width: 60px; text-align: right; border-radius: 4px; padding: 2px 5px; font-size: 12px; font-weight: 700;
         }
 
+        /* --- FILTER BAR (NUEVO) --- */
+        .filter-bar {
+            display: flex; align-items: center; gap: 15px; margin-bottom: 20px;
+            background: #FFFFFF; padding: 10px 15px; border-radius: 10px; 
+            border: 1px solid var(--border); box-shadow: var(--shadow-sm);
+        }
+        .filter-group { display: flex; align-items: center; gap: 8px; }
+        .filter-lbl { font-size: 11px; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; }
+        .filter-select, .filter-date {
+            border: 1px solid var(--border); border-radius: 6px; padding: 6px 10px;
+            font-family: 'Inter'; font-size: 13px; color: var(--text-main); background: #F9FAFB;
+        }
+        .btn-clear-filter {
+            background: transparent; border: 1px solid var(--border); color: var(--text-secondary);
+            font-size: 12px; font-weight: 600; padding: 6px 12px; border-radius: 6px; cursor: pointer;
+        }
+        .btn-clear-filter:hover { background: #F3F4F6; }
+
         /* LAYOUT PRINCIPAL */
         .layout-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 25px; align-items: start; }
 
-        /* --- CUENTAS T CON SCROLL INTERNO --- */
+        /* --- CUENTAS T --- */
         .t-account-container {
             background: var(--card-bg); border-radius: 12px; border: 1px solid var(--border);
             box-shadow: var(--shadow-sm); overflow: hidden; display: flex; flex-direction: column;
-            height: 550px; /* ALTURA FIJA PARA EL SCROLL */
+            height: 550px;
         }
         .t-header {
             background: #F8FAFC; padding: 12px 20px; border-bottom: 1px solid var(--border);
@@ -155,26 +173,13 @@
             flex-shrink: 0;
         }
         .t-body { display: flex; flex: 1; position: relative; overflow: hidden; }
-        
-        .t-divider {
-            width: 1px; background: var(--border); position: absolute;
-            top: 0; bottom: 0; left: 50%; transform: translateX(-50%); z-index: 10;
-        }
-        
+        .t-divider { width: 1px; background: var(--border); position: absolute; top: 0; bottom: 0; left: 50%; transform: translateX(-50%); z-index: 10; }
         .t-side { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
-        
-        .t-col-header {
-            padding: 10px; text-align: center; font-size: 11px; font-weight: 700; text-transform: uppercase;
-            border-bottom: 1px solid var(--border); flex-shrink: 0;
-        }
+        .t-col-header { padding: 10px; text-align: center; font-size: 11px; font-weight: 700; text-transform: uppercase; border-bottom: 1px solid var(--border); flex-shrink: 0; }
         .h-debe { color: var(--success); background: rgba(16, 185, 129, 0.05); }
         .h-haber { color: var(--danger); background: rgba(239, 68, 68, 0.05); }
 
-        /* SCROLL INDEPENDIENTE */
-        .t-list-scroll { 
-            flex: 1; overflow-y: auto; padding: 0; 
-            scrollbar-width: thin; scrollbar-color: #E2E8F0 transparent;
-        }
+        .t-list-scroll { flex: 1; overflow-y: auto; padding: 0; scrollbar-width: thin; scrollbar-color: #E2E8F0 transparent; }
         .t-list-scroll::-webkit-scrollbar { width: 6px; }
         .t-list-scroll::-webkit-scrollbar-thumb { background-color: #E2E8F0; border-radius: 3px; }
 
@@ -192,18 +197,13 @@
         .chart-card {
             background: var(--card-bg); border-radius: 12px; border: 1px solid var(--border);
             box-shadow: var(--shadow-sm); padding: 20px; display: flex; flex-direction: column;
-            height: 550px; /* Alineado con la tabla */
+            height: 550px;
         }
         .chart-header { display: flex; justify-content: space-between; margin-bottom: 10px; }
         .chart-title { font-size: 13px; font-weight: 700; }
-        
         .chart-wrapper { height: 200px; position: relative; flex-shrink: 0; margin-bottom: 15px; }
-        
         .legend-list { flex: 1; overflow-y: auto; padding-right: 5px; scrollbar-width: thin; }
-        .legend-item { 
-            display: flex; align-items: center; justify-content: space-between; 
-            font-size: 12px; padding: 8px 0; border-bottom: 1px dashed #F3F4F6; 
-        }
+        .legend-item { display: flex; align-items: center; justify-content: space-between; font-size: 12px; padding: 8px 0; border-bottom: 1px dashed #F3F4F6; }
         .leg-left { display: flex; align-items: center; gap: 8px; }
         .leg-color { width: 8px; height: 8px; border-radius: 2px; }
         .leg-cat { font-weight: 600; color: var(--text-main); font-size: 11px; }
@@ -222,16 +222,14 @@
         .modal.open { opacity: 1; pointer-events: all; transform: translate(-50%, -50%) scale(1); }
         .modal-head { padding: 15px 20px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; font-weight: 700; }
         .modal-body { padding: 20px; }
-        
         .type-toggle { display: flex; background: #F3F4F6; padding: 4px; border-radius: 8px; margin-bottom: 20px; }
         .tt-opt { flex: 1; text-align: center; padding: 8px; font-size: 13px; font-weight: 600; border-radius: 6px; cursor: pointer; color: var(--text-secondary); }
         .tt-opt.active.inc { background: var(--success); color: white; }
         .tt-opt.active.exp { background: var(--danger); color: white; }
-        
         .inp-full { width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: 6px; margin-bottom: 15px; background: #F9FAFB; font-size: 14px; }
         .btn-save { width: 100%; padding: 12px; background: var(--text-main); color: white; font-weight: 700; border: none; border-radius: 8px; cursor: pointer; }
         
-        /* Loader */
+        /* Loader & Dots */
         .loader-overlay { position:fixed; inset:0; background:rgba(255,255,255,0.9); z-index:200; display:none; flex-direction:column; align-items:center; justify-content:center; }
         .spinner { width:40px; height:40px; border:4px solid #E5E7EB; border-top:4px solid var(--info); border-radius:50%; animation:spin 1s linear infinite; }
         @keyframes spin { 0% { transform:rotate(0deg); } 100% { transform:rotate(360deg); } }
@@ -289,12 +287,10 @@
             
             <div class="kpi-card balance-card">
                 <div class="kpi-label" style="color:#3B82F6;">Balance Neto</div>
-                
                 <div class="bal-row-main">
                     <span id="kpiBal" class="bal-pesos">$0</span>
                     <div class="bal-badge" id="savingRate">0% Ahorro</div>
                 </div>
-                
                 <div class="bal-row-sub">
                     <span>USD <span id="kpiUsd" class="usd-val">0.00</span></span>
                     <span style="color:#CBD5E1">|</span>
@@ -303,9 +299,23 @@
             </div>
         </div>
 
+        <div class="filter-bar">
+            <div class="filter-group">
+                <span class="filter-lbl"><i class="fas fa-filter"></i> Filtrar:</span>
+                <select id="filterCat" class="filter-select" onchange="runFilter()">
+                    <option value="all">Todas las Categorías</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <span class="filter-lbl">Fecha:</span>
+                <input type="date" id="filterDate" class="filter-date" onchange="runFilter()">
+            </div>
+            <button class="btn-clear-filter" onclick="resetFilters()">Limpiar</button>
+        </div>
+
         <div class="layout-grid">
             <div class="t-account-container">
-                <div class="t-header">Movimientos del Mes</div>
+                <div class="t-header">Movimientos</div>
                 <div class="t-body">
                     <div class="t-divider"></div>
                     <div class="t-side">
@@ -366,7 +376,7 @@
     const defData = { txs: [], cats: { exp:['Esenciales','Deudas','Personal','Ahorro'], inc:['Sueldo','Ventas','Varios'] }, concepts: { "Esenciales": ["Alquiler", "Luz/Gas", "Supermercado"], "Deudas": ["Tarjeta Visa"], "Sueldo": ["Javier", "Mary"] } };
     const chartColors = ['#3B82F6','#10B981','#F59E0B','#EF4444','#8B5CF6','#EC4899','#6366F1','#64748B'];
     let data = defData;
-    let editId = null, chartInstance = null, currentTxs = [];
+    let editId = null, chartInstance = null, baseTxs = []; // baseTxs = month data without filters
 
     window.onload = () => {
         const d = new Date();
@@ -399,10 +409,62 @@
         const [y, m] = ym.split('-');
         const months = ["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"];
         document.getElementById('monthTxt').innerText = `${months[parseInt(m)-1]} ${y}`;
-        currentTxs = (data.txs || []).filter(t => t.date.startsWith(ym)).sort((a,b) => a.date.localeCompare(b.date));
-        renderTView(currentTxs); renderChart(currentTxs, null); renderCats();
+        
+        // 1. Get Base Data for Month
+        baseTxs = (data.txs || []).filter(t => t.date.startsWith(ym)).sort((a,b) => a.date.localeCompare(b.date));
+        
+        // 2. Populate Filters
+        populateFilterCats();
+        
+        // 3. Run Filters to render
+        runFilter();
     }
 
+    // --- FILTER LOGIC ---
+    function populateFilterCats() {
+        // Collect all unique cats from current month data
+        const cats = new Set();
+        baseTxs.forEach(t => cats.add(t.cat));
+        
+        const sel = document.getElementById('filterCat');
+        const currentVal = sel.value;
+        sel.innerHTML = '<option value="all">Todas las Categorías</option>';
+        Array.from(cats).sort().forEach(c => {
+            const opt = document.createElement('option');
+            opt.value = c; opt.innerText = c;
+            sel.appendChild(opt);
+        });
+        sel.value = currentVal === 'all' || cats.has(currentVal) ? currentVal : 'all';
+    }
+
+    function runFilter() {
+        const fCat = document.getElementById('filterCat').value;
+        const fDate = document.getElementById('filterDate').value;
+        
+        let filtered = baseTxs;
+        
+        // Filter Category
+        if(fCat !== 'all') {
+            filtered = filtered.filter(t => t.cat === fCat);
+        }
+        // Filter Date
+        if(fDate) {
+            filtered = filtered.filter(t => t.date === fDate);
+        }
+
+        renderTView(filtered);
+        renderChart(filtered, null);
+        // We also need to re-render concepts if new transaction
+        renderCats(); 
+    }
+
+    function resetFilters() {
+        document.getElementById('filterCat').value = 'all';
+        document.getElementById('filterDate').value = '';
+        runFilter();
+    }
+
+    // --- RENDERERS ---
     function renderTView(txs) {
         const lInc = document.getElementById('list-inc'), lExp = document.getElementById('list-exp');
         lInc.innerHTML = ''; lExp.innerHTML = '';
@@ -431,7 +493,6 @@
         const rate = parseFloat(document.getElementById('usdRate').value) || 1;
         document.getElementById('kpiUsd').innerText = (bal/rate).toFixed(2);
         
-        // Calculo % Ahorro
         let savPct = 0;
         if(sInc > 0) savPct = ((sInc - sExp) / sInc) * 100;
         const savEl = document.getElementById('savingRate');
@@ -482,7 +543,9 @@
         });
     }
     
-    function resetChart() { renderChart(currentTxs, null); }
+    function resetChart() { renderChart(baseTxs, null); } // Reset to base loaded data
+
+    // --- FORM & ACTIONS ---
     function openSheet() { if(!editId) resetForm(); document.getElementById('modal').classList.add('open'); document.getElementById('overlay').style.display='block'; }
     function closeSheet() { document.getElementById('modal').classList.remove('open'); document.getElementById('overlay').style.display='none'; }
     function setType(t) { document.getElementById('fType').value = t; document.getElementById('sw-inc').className = `tt-opt ${t=='inc'?'active inc':''}`; document.getElementById('sw-exp').className = `tt-opt ${t=='exp'?'active exp':''}`; renderCats(); }
