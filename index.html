@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>J&M Financial V40.2 Slim</title>
+    <title>J&M Financial V40.3 (Filters + Redesign)</title>
     
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -39,7 +39,7 @@
 
         /* --- SIDEBAR --- */
         .sidebar {
-            width: 230px; /* Un poco más angosta */
+            width: 230px;
             background: var(--sidebar-bg);
             display: flex; flex-direction: column; flex-shrink: 0;
             border-right: 1px solid #1F2937;
@@ -106,51 +106,74 @@
         /* CONTENT */
         .content-area { flex: 1; overflow-y: auto; padding: 20px 25px; }
 
-        /* --- KPI GRID SLIM (OPTIMIZADO) --- */
+        /* --- NEW KPI ROW (REDISEÑADO) --- */
         .kpi-row {
             display: grid; 
-            grid-template-columns: 1fr 1fr 2fr; /* El balance ocupa más espacio horizontal */
+            grid-template-columns: 180px 180px 1fr; /* Ingresos y Gastos fijos, Balance ocupa el resto */
             gap: 15px; 
-            margin-bottom: 15px; /* Menos margen inferior */
+            margin-bottom: 20px;
         }
         .kpi-card {
-            background: var(--card-bg); border-radius: 10px; padding: 12px 15px; /* Padding reducido */
+            background: var(--card-bg); border-radius: 10px; padding: 15px; 
             border: 1px solid var(--border); box-shadow: var(--shadow-sm);
             display: flex; flex-direction: column; justify-content: center;
-            height: 80px; /* Altura fija reducida */
+            height: 90px;
         }
         .kpi-label { 
             font-size: 10px; font-weight: 700; text-transform: uppercase; 
-            color: var(--text-secondary); margin-bottom: 4px; 
+            color: var(--text-secondary); margin-bottom: 5px; 
         }
         .kpi-value { 
-            font-size: 20px; /* Fuente más chica */
-            font-weight: 800; color: var(--text-main); line-height: 1.1; 
+            font-size: 22px; font-weight: 800; color: var(--text-main); line-height: 1; 
         }
 
-        /* Balance Card Horizontal Layout */
+        /* Balance Card Redesigned - Usando el espacio verde */
         .balance-card {
-            background: linear-gradient(135deg, #EFF6FF 0%, #FFFFFF 100%);
+            background: linear-gradient(to right, #EFF6FF, #FFFFFF);
             border: 1px solid #BFDBFE;
-            flex-direction: row; /* Horizontal */
+            flex-direction: row; 
             align-items: center;
+            padding: 0 25px; /* Más padding lateral */
             justify-content: space-between;
         }
-        .bal-left { display: flex; flex-direction: column; justify-content: center; }
-        .bal-right { text-align: right; display: flex; flex-direction: column; justify-content: center; align-items: flex-end; }
         
-        .bal-pesos { font-size: 22px; font-weight: 900; color: #1E3A8A; margin-right: 8px; }
+        /* Izquierda: Pesos */
+        .bal-section-left { display: flex; flex-direction: column; justify-content: center; min-width: 150px; }
+        .bal-pesos { font-size: 28px; font-weight: 900; color: #1E3A8A; letter-spacing: -0.5px; }
+        
+        /* Centro: USD (Area verde recuperada) */
+        .bal-section-center { 
+            display: flex; flex-direction: column; align-items: center; justify-content: center; 
+            flex: 1; border-left: 1px dashed #BFDBFE; border-right: 1px dashed #BFDBFE; margin: 0 20px;
+        }
+        .usd-main { font-size: 20px; font-weight: 800; color: #334155; }
+        .tc-input-group { display: flex; align-items: center; gap: 5px; margin-top: 4px; background: white; padding: 2px 8px; border-radius: 15px; border: 1px solid #CBD5E1; }
+        .tc-label { font-size: 10px; font-weight: 700; color: #64748B; }
+        .rate-edit { border: none; width: 40px; font-size: 11px; font-weight: 700; color: #334155; text-align: right; outline:none; }
+
+        /* Derecha: Badge Ahorro */
+        .bal-section-right { text-align: right; }
         .bal-badge { 
-            background: #DCFCE7; color: #166534; padding: 2px 6px; border-radius: 4px; 
-            font-size: 10px; font-weight: 700; border: 1px solid #86EFAC; display: inline-block; vertical-align: middle;
+            background: #DCFCE7; color: #166534; padding: 5px 10px; border-radius: 8px; 
+            font-size: 12px; font-weight: 700; border: 1px solid #86EFAC; display: inline-block;
         }
-        
-        .usd-val { color: #334155; font-weight: 800; font-size: 13px; }
-        .rate-group { font-size: 10px; color: #64748B; font-weight: 600; margin-top: 2px; display: flex; align-items: center; gap: 5px; }
-        .rate-edit { 
-            background: rgba(255,255,255,0.8); border: 1px solid #CBD5E1; 
-            width: 45px; text-align: right; border-radius: 4px; padding: 1px 4px; font-size: 10px; font-weight: 700;
+
+        /* --- FILTROS BAR (NUEVO) --- */
+        .filter-bar {
+            display: flex; gap: 10px; margin-bottom: 15px; align-items: center;
+            background: white; padding: 8px 12px; border-radius: 8px; border: 1px solid var(--border);
         }
+        .filter-label { font-size: 11px; font-weight: 700; color: var(--text-secondary); margin-right: 5px; text-transform: uppercase; }
+        .filter-input {
+            border: 1px solid var(--border); border-radius: 6px; padding: 5px 8px; font-size: 12px; font-family: 'Inter'; color: var(--text-main); background: #F9FAFB;
+        }
+        .filter-input:focus { border-color: var(--info); background: white; }
+        .btn-reset-filter {
+            margin-left: auto; border: none; background: #F3F4F6; color: var(--text-secondary);
+            font-size: 11px; font-weight: 600; padding: 5px 10px; border-radius: 4px; cursor: pointer;
+        }
+        .btn-reset-filter:hover { background: #E5E7EB; color: var(--text-main); }
+
 
         /* COPY ZONE */
         .copy-zone {
@@ -166,7 +189,7 @@
         .t-account-container {
             background: var(--card-bg); border-radius: 10px; border: 1px solid var(--border);
             box-shadow: var(--shadow-sm); overflow: hidden; display: flex; flex-direction: column;
-            height: calc(100vh - 250px); /* Dinámico según pantalla */
+            height: calc(100vh - 320px); /* Ajustado por filtros */
             min-height: 400px;
         }
         .t-header {
@@ -176,9 +199,7 @@
         }
         .t-body { display: flex; flex: 1; position: relative; overflow: hidden; }
         
-        .t-divider {
-            width: 1px; background: var(--border); position: absolute; top: 0; bottom: 0; left: 50%; transform: translateX(-50%); z-index: 10;
-        }
+        .t-divider { width: 1px; background: var(--border); position: absolute; top: 0; bottom: 0; left: 50%; transform: translateX(-50%); z-index: 10; }
         .t-side { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
         
         .t-col-header {
@@ -219,7 +240,7 @@
         .chart-card {
             background: var(--card-bg); border-radius: 10px; border: 1px solid var(--border);
             box-shadow: var(--shadow-sm); padding: 15px; display: flex; flex-direction: column;
-            height: calc(100vh - 250px); /* Alinear con tabla */
+            height: calc(100vh - 320px); 
             min-height: 400px;
         }
         .chart-header { display: flex; justify-content: space-between; margin-bottom: 10px; }
@@ -315,21 +336,40 @@
             </div>
             
             <div class="kpi-card balance-card">
-                <div class="bal-left">
+                <div class="bal-section-left">
                     <div class="kpi-label" style="color:#3B82F6;">Balance Neto</div>
-                    <div style="display:flex; align-items:center;">
-                        <span id="kpiBal" class="bal-pesos">$0</span>
-                        <div class="bal-badge" id="savingRate">0%</div>
-                    </div>
+                    <div class="bal-pesos" id="kpiBal">$0</div>
                 </div>
                 
-                <div class="bal-right">
-                    <div class="usd-val">USD <span id="kpiUsd">0.00</span></div>
-                    <div class="rate-group">
-                        TC: <input type="number" id="usdRate" value="1200" class="rate-edit" onchange="loadData()">
+                <div class="bal-section-center">
+                    <div class="usd-main">USD <span id="kpiUsd">0.00</span></div>
+                    <div class="tc-input-group">
+                        <span class="tc-label">TC:</span>
+                        <input type="number" id="usdRate" value="1200" class="rate-edit" onchange="applyFilters()">
                     </div>
                 </div>
+
+                <div class="bal-section-right">
+                    <div class="bal-badge" id="savingRate">0% Ahorro</div>
+                </div>
             </div>
+        </div>
+
+        <div class="filter-bar">
+            <span class="filter-label"><i class="fas fa-filter"></i> Filtros:</span>
+            
+            <span class="filter-label" style="margin-left:10px; font-weight:500;">Desde</span>
+            <input type="date" id="filterStart" class="filter-input" onchange="applyFilters()">
+            
+            <span class="filter-label" style="margin-left:5px; font-weight:500;">Hasta</span>
+            <input type="date" id="filterEnd" class="filter-input" onchange="applyFilters()">
+            
+            <span class="filter-label" style="margin-left:10px; font-weight:500;">Categoría</span>
+            <select id="filterCat" class="filter-input" style="min-width:120px;" onchange="applyFilters()">
+                <option value="all">Todas</option>
+            </select>
+
+            <button class="btn-reset-filter" onclick="resetFilters()">Limpiar</button>
         </div>
 
         <div class="copy-zone" id="copyZone">
@@ -403,7 +443,7 @@
     const defData = { txs: [], cats: { exp:['Esenciales','Deudas','Personal','Ahorro'], inc:['Sueldo','Ventas','Varios'] }, concepts: { "Esenciales": ["Alquiler", "Luz/Gas", "Supermercado"], "Deudas": ["Tarjeta Visa"], "Sueldo": ["Javier", "Mary"] } };
     const chartColors = ['#3B82F6','#10B981','#F59E0B','#EF4444','#8B5CF6','#EC4899','#6366F1','#64748B'];
     let data = defData;
-    let editId = null, chartInstance = null, currentTxs = [];
+    let editId = null, chartInstance = null, currentTxs = [], filteredTxs = [];
 
     window.onload = () => {
         const d = new Date();
@@ -439,19 +479,61 @@
         const months = ["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"];
         document.getElementById('monthTxt').innerText = `${months[parseInt(m)-1]} ${y}`;
         
-        // --- ORDENAMIENTO CRÍTICO (TIMELINE LOGIC) ---
-        // Se aplica AQUÍ para que Gráficos y Lista usen el mismo orden exacto.
+        // Carga Inicial
         currentTxs = (data.txs || []).filter(t => t.date.startsWith(ym));
         
+        // Ordenamiento (Timeline Logic)
         currentTxs.sort((a,b) => {
             if (a.date !== b.date) return a.date.localeCompare(b.date);
-            if (a.type !== b.type) return a.type === 'inc' ? -1 : 1; // Ingresos primero
-            if (a.exec !== b.exec) return b.exec - a.exec; // Ejecutados primero
-            return Math.abs(b.amount) - Math.abs(a.amount); // Mayor monto primero
+            if (a.type !== b.type) return a.type === 'inc' ? -1 : 1; 
+            if (a.exec !== b.exec) return b.exec - a.exec; 
+            return Math.abs(b.amount) - Math.abs(a.amount); 
         });
 
+        // Poblar Select de Filtros con categorías existentes en este mes
+        const uniqueCats = [...new Set(currentTxs.map(t => t.cat))].sort();
+        const catSel = document.getElementById('filterCat');
+        catSel.innerHTML = '<option value="all">Todas</option>';
+        uniqueCats.forEach(c => catSel.add(new Option(c, c)));
+
+        // Reset inputs de fecha al mes actual
+        const lastDay = new Date(y, m, 0).getDate();
+        document.getElementById('filterStart').value = `${ym}-01`;
+        document.getElementById('filterStart').min = `${ym}-01`;
+        document.getElementById('filterStart').max = `${ym}-${lastDay}`;
+        document.getElementById('filterEnd').value = `${ym}-${lastDay}`;
+        document.getElementById('filterEnd').min = `${ym}-01`;
+        document.getElementById('filterEnd').max = `${ym}-${lastDay}`;
+
         document.getElementById('copyZone').style.display = currentTxs.length === 0 ? 'block' : 'none';
-        renderTView(currentTxs); renderChart(currentTxs, null); renderCats();
+        
+        applyFilters(); // Esto llama a los renders
+    }
+
+    function applyFilters() {
+        const start = document.getElementById('filterStart').value;
+        const end = document.getElementById('filterEnd').value;
+        const cat = document.getElementById('filterCat').value;
+
+        filteredTxs = currentTxs.filter(t => {
+            if(start && t.date < start) return false;
+            if(end && t.date > end) return false;
+            if(cat !== 'all' && t.cat !== cat) return false;
+            return true;
+        });
+
+        renderTView(filteredTxs);
+        renderChart(filteredTxs, null);
+    }
+
+    function resetFilters() {
+        const ym = document.getElementById('dateInput').value;
+        const [y, m] = ym.split('-');
+        const lastDay = new Date(y, m, 0).getDate();
+        document.getElementById('filterStart').value = `${ym}-01`;
+        document.getElementById('filterEnd').value = `${ym}-${lastDay}`;
+        document.getElementById('filterCat').value = 'all';
+        applyFilters();
     }
 
     function renderTView(txs) {
@@ -464,7 +546,6 @@
             const isInc = t.type === 'inc'; 
             const amt = Math.abs(t.amount);
             
-            // Calculo de saldos acumulados (Timeline logic)
             if(isInc) { runningBalance += amt; sInc += amt; } 
             else { runningBalance -= amt; sExp += amt; }
 
@@ -472,10 +553,7 @@
             if(!t.exec && !isInc && (new Date(t.date) - new Date(today)) / 86400000 <= 5) dot = `<span class="alert-dot" title="Vence pronto"></span>`;
             
             let balHtml = '';
-            // Badge de saldo solo en gastos
-            if (!isInc) {
-                balHtml = `<span class="subtotal-tag ${runningBalance >= 0 ? 'st-ok' : 'st-bad'}">Quedan: $${Math.floor(runningBalance).toLocaleString()}</span>`;
-            }
+            if (!isInc) balHtml = `<span class="subtotal-tag ${runningBalance >= 0 ? 'st-ok' : 'st-bad'}">Quedan: $${Math.floor(runningBalance).toLocaleString()}</span>`;
 
             const div = document.createElement('div');
             div.className = `t-row ${t.exec ? 'executed' : ''}`; 
@@ -492,20 +570,19 @@
             (isInc ? lInc : lExp).appendChild(div);
         });
 
+        // KPIs Reactivos
         document.getElementById('sum-inc').innerText = `$${sInc.toLocaleString()}`;
         document.getElementById('sum-exp').innerText = `$${sExp.toLocaleString()}`;
         
         const bal = sInc - sExp;
-        const balEl = document.getElementById('kpiBal');
-        balEl.innerText = `$${bal.toLocaleString()}`;
-        balEl.style.color = bal >= 0 ? '#1E3A8A' : '#DC2626';
-
+        document.getElementById('kpiBal').innerText = `$${bal.toLocaleString()}`;
+        
         const rate = parseFloat(document.getElementById('usdRate').value) || 1;
         document.getElementById('kpiUsd').innerText = (bal/rate).toFixed(2);
         
         let savPct = 0; if(sInc > 0) savPct = ((sInc - sExp) / sInc) * 100;
         const savEl = document.getElementById('savingRate');
-        savEl.innerText = `${savPct.toFixed(0)}%`;
+        savEl.innerText = `${savPct.toFixed(0)}% Ahorro`;
         savEl.style.background = savPct >= 0 ? '#DCFCE7' : '#FEE2E2';
         savEl.style.color = savPct >= 0 ? '#166534' : '#991B1B';
         savEl.style.borderColor = savPct >= 0 ? '#86EFAC' : '#FECACA';
@@ -565,7 +642,7 @@
         data.txs = [...data.txs, ...newTxs]; saveData();
     }
     
-    function resetChart() { renderChart(currentTxs, null); }
+    function resetChart() { renderChart(filteredTxs, null); }
     function openSheet() { if(!editId) resetForm(); document.getElementById('modal').classList.add('open'); document.getElementById('overlay').style.display='block'; }
     function closeSheet() { document.getElementById('modal').classList.remove('open'); document.getElementById('overlay').style.display='none'; }
     function setType(t) { document.getElementById('fType').value = t; document.getElementById('sw-inc').className = `tt-opt ${t=='inc'?'active inc':''}`; document.getElementById('sw-exp').className = `tt-opt ${t=='exp'?'active exp':''}`; renderCats(); }
