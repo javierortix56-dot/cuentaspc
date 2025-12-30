@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>J&M Financial V40.3 (Filters + Redesign)</title>
+    <title>J&M Financial V40.4 (Search + Fix)</title>
     
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -106,10 +106,11 @@
         /* CONTENT */
         .content-area { flex: 1; overflow-y: auto; padding: 20px 25px; }
 
-        /* --- NEW KPI ROW (REDISEÑADO) --- */
+        /* --- KPI ROW CORREGIDO --- */
         .kpi-row {
             display: grid; 
-            grid-template-columns: 180px 180px 1fr; /* Ingresos y Gastos fijos, Balance ocupa el resto */
+            /* Cambio clave: porcentajes flexibles en lugar de px fijos para evitar cortes */
+            grid-template-columns: 20% 20% 1fr; 
             gap: 15px; 
             margin-bottom: 20px;
         }
@@ -118,56 +119,62 @@
             border: 1px solid var(--border); box-shadow: var(--shadow-sm);
             display: flex; flex-direction: column; justify-content: center;
             height: 90px;
+            min-width: 0; /* Vital para que el flex interno no rompa el grid */
         }
         .kpi-label { 
             font-size: 10px; font-weight: 700; text-transform: uppercase; 
             color: var(--text-secondary); margin-bottom: 5px; 
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
         }
         .kpi-value { 
             font-size: 22px; font-weight: 800; color: var(--text-main); line-height: 1; 
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
         }
 
-        /* Balance Card Redesigned - Usando el espacio verde */
+        /* Balance Card */
         .balance-card {
             background: linear-gradient(to right, #EFF6FF, #FFFFFF);
             border: 1px solid #BFDBFE;
             flex-direction: row; 
             align-items: center;
-            padding: 0 25px; /* Más padding lateral */
+            padding: 0 20px;
             justify-content: space-between;
         }
         
-        /* Izquierda: Pesos */
-        .bal-section-left { display: flex; flex-direction: column; justify-content: center; min-width: 150px; }
-        .bal-pesos { font-size: 28px; font-weight: 900; color: #1E3A8A; letter-spacing: -0.5px; }
+        .bal-section-left { display: flex; flex-direction: column; justify-content: center; min-width: 120px; }
+        .bal-pesos { font-size: 28px; font-weight: 900; color: #1E3A8A; letter-spacing: -0.5px; white-space: nowrap; }
         
-        /* Centro: USD (Area verde recuperada) */
         .bal-section-center { 
             display: flex; flex-direction: column; align-items: center; justify-content: center; 
-            flex: 1; border-left: 1px dashed #BFDBFE; border-right: 1px dashed #BFDBFE; margin: 0 20px;
+            flex: 1; border-left: 1px dashed #BFDBFE; border-right: 1px dashed #BFDBFE; margin: 0 15px;
+            overflow: hidden; /* Evita desborde */
         }
-        .usd-main { font-size: 20px; font-weight: 800; color: #334155; }
+        .usd-main { font-size: 18px; font-weight: 800; color: #334155; white-space: nowrap; }
         .tc-input-group { display: flex; align-items: center; gap: 5px; margin-top: 4px; background: white; padding: 2px 8px; border-radius: 15px; border: 1px solid #CBD5E1; }
         .tc-label { font-size: 10px; font-weight: 700; color: #64748B; }
         .rate-edit { border: none; width: 40px; font-size: 11px; font-weight: 700; color: #334155; text-align: right; outline:none; }
 
-        /* Derecha: Badge Ahorro */
-        .bal-section-right { text-align: right; }
+        .bal-section-right { text-align: right; min-width: 80px; }
         .bal-badge { 
             background: #DCFCE7; color: #166534; padding: 5px 10px; border-radius: 8px; 
-            font-size: 12px; font-weight: 700; border: 1px solid #86EFAC; display: inline-block;
+            font-size: 12px; font-weight: 700; border: 1px solid #86EFAC; display: inline-block; white-space: nowrap;
         }
 
-        /* --- FILTROS BAR (NUEVO) --- */
+        /* --- FILTROS BAR + BÚSQUEDA --- */
         .filter-bar {
             display: flex; gap: 10px; margin-bottom: 15px; align-items: center;
             background: white; padding: 8px 12px; border-radius: 8px; border: 1px solid var(--border);
+            flex-wrap: wrap; /* Para pantallas chicas */
         }
         .filter-label { font-size: 11px; font-weight: 700; color: var(--text-secondary); margin-right: 5px; text-transform: uppercase; }
         .filter-input {
             border: 1px solid var(--border); border-radius: 6px; padding: 5px 8px; font-size: 12px; font-family: 'Inter'; color: var(--text-main); background: #F9FAFB;
         }
         .filter-input:focus { border-color: var(--info); background: white; }
+        
+        /* Input de búsqueda específico */
+        #filterSearch { flex: 1; min-width: 150px; }
+        
         .btn-reset-filter {
             margin-left: auto; border: none; background: #F3F4F6; color: var(--text-secondary);
             font-size: 11px; font-weight: 600; padding: 5px 10px; border-radius: 4px; cursor: pointer;
@@ -189,7 +196,7 @@
         .t-account-container {
             background: var(--card-bg); border-radius: 10px; border: 1px solid var(--border);
             box-shadow: var(--shadow-sm); overflow: hidden; display: flex; flex-direction: column;
-            height: calc(100vh - 320px); /* Ajustado por filtros */
+            height: calc(100vh - 320px);
             min-height: 400px;
         }
         .t-header {
@@ -356,16 +363,18 @@
         </div>
 
         <div class="filter-bar">
-            <span class="filter-label"><i class="fas fa-filter"></i> Filtros:</span>
-            
-            <span class="filter-label" style="margin-left:10px; font-weight:500;">Desde</span>
+            <i class="fas fa-search" style="color:var(--text-secondary);"></i>
+            <input type="text" id="filterSearch" class="filter-input" placeholder="Buscar..." onkeyup="applyFilters()">
+
+            <div style="width:1px; height:20px; background:var(--border); margin:0 5px;"></div>
+
+            <span class="filter-label">Desde</span>
             <input type="date" id="filterStart" class="filter-input" onchange="applyFilters()">
             
-            <span class="filter-label" style="margin-left:5px; font-weight:500;">Hasta</span>
+            <span class="filter-label">Hasta</span>
             <input type="date" id="filterEnd" class="filter-input" onchange="applyFilters()">
             
-            <span class="filter-label" style="margin-left:10px; font-weight:500;">Categoría</span>
-            <select id="filterCat" class="filter-input" style="min-width:120px;" onchange="applyFilters()">
+            <select id="filterCat" class="filter-input" style="min-width:100px;" onchange="applyFilters()">
                 <option value="all">Todas</option>
             </select>
 
@@ -479,10 +488,7 @@
         const months = ["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"];
         document.getElementById('monthTxt').innerText = `${months[parseInt(m)-1]} ${y}`;
         
-        // Carga Inicial
         currentTxs = (data.txs || []).filter(t => t.date.startsWith(ym));
-        
-        // Ordenamiento (Timeline Logic)
         currentTxs.sort((a,b) => {
             if (a.date !== b.date) return a.date.localeCompare(b.date);
             if (a.type !== b.type) return a.type === 'inc' ? -1 : 1; 
@@ -490,35 +496,31 @@
             return Math.abs(b.amount) - Math.abs(a.amount); 
         });
 
-        // Poblar Select de Filtros con categorías existentes en este mes
         const uniqueCats = [...new Set(currentTxs.map(t => t.cat))].sort();
         const catSel = document.getElementById('filterCat');
         catSel.innerHTML = '<option value="all">Todas</option>';
         uniqueCats.forEach(c => catSel.add(new Option(c, c)));
 
-        // Reset inputs de fecha al mes actual
         const lastDay = new Date(y, m, 0).getDate();
         document.getElementById('filterStart').value = `${ym}-01`;
-        document.getElementById('filterStart').min = `${ym}-01`;
-        document.getElementById('filterStart').max = `${ym}-${lastDay}`;
         document.getElementById('filterEnd').value = `${ym}-${lastDay}`;
-        document.getElementById('filterEnd').min = `${ym}-01`;
-        document.getElementById('filterEnd').max = `${ym}-${lastDay}`;
+        document.getElementById('filterSearch').value = ''; // Reset búsqueda
 
         document.getElementById('copyZone').style.display = currentTxs.length === 0 ? 'block' : 'none';
-        
-        applyFilters(); // Esto llama a los renders
+        applyFilters();
     }
 
     function applyFilters() {
         const start = document.getElementById('filterStart').value;
         const end = document.getElementById('filterEnd').value;
         const cat = document.getElementById('filterCat').value;
+        const term = document.getElementById('filterSearch').value.toLowerCase(); // Texto a buscar
 
         filteredTxs = currentTxs.filter(t => {
             if(start && t.date < start) return false;
             if(end && t.date > end) return false;
             if(cat !== 'all' && t.cat !== cat) return false;
+            if(term && !t.desc.toLowerCase().includes(term) && !t.cat.toLowerCase().includes(term)) return false; // Filtro de texto
             return true;
         });
 
@@ -533,6 +535,7 @@
         document.getElementById('filterStart').value = `${ym}-01`;
         document.getElementById('filterEnd').value = `${ym}-${lastDay}`;
         document.getElementById('filterCat').value = 'all';
+        document.getElementById('filterSearch').value = '';
         applyFilters();
     }
 
@@ -570,7 +573,6 @@
             (isInc ? lInc : lExp).appendChild(div);
         });
 
-        // KPIs Reactivos
         document.getElementById('sum-inc').innerText = `$${sInc.toLocaleString()}`;
         document.getElementById('sum-exp').innerText = `$${sExp.toLocaleString()}`;
         
