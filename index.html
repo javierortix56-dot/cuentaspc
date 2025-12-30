@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>J&M Financial V40.4 (Search + Fix)</title>
+    <title>J&M Financial V40.5 (Final Fix)</title>
     
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -106,10 +106,9 @@
         /* CONTENT */
         .content-area { flex: 1; overflow-y: auto; padding: 20px 25px; }
 
-        /* --- KPI ROW CORREGIDO --- */
+        /* --- KPI ROW --- */
         .kpi-row {
             display: grid; 
-            /* Cambio clave: porcentajes flexibles en lugar de px fijos para evitar cortes */
             grid-template-columns: 20% 20% 1fr; 
             gap: 15px; 
             margin-bottom: 20px;
@@ -119,7 +118,7 @@
             border: 1px solid var(--border); box-shadow: var(--shadow-sm);
             display: flex; flex-direction: column; justify-content: center;
             height: 90px;
-            min-width: 0; /* Vital para que el flex interno no rompa el grid */
+            min-width: 0; 
         }
         .kpi-label { 
             font-size: 10px; font-weight: 700; text-transform: uppercase; 
@@ -147,12 +146,18 @@
         .bal-section-center { 
             display: flex; flex-direction: column; align-items: center; justify-content: center; 
             flex: 1; border-left: 1px dashed #BFDBFE; border-right: 1px dashed #BFDBFE; margin: 0 15px;
-            overflow: hidden; /* Evita desborde */
+            overflow: hidden; 
         }
         .usd-main { font-size: 18px; font-weight: 800; color: #334155; white-space: nowrap; }
         .tc-input-group { display: flex; align-items: center; gap: 5px; margin-top: 4px; background: white; padding: 2px 8px; border-radius: 15px; border: 1px solid #CBD5E1; }
         .tc-label { font-size: 10px; font-weight: 700; color: #64748B; }
-        .rate-edit { border: none; width: 40px; font-size: 11px; font-weight: 700; color: #334155; text-align: right; outline:none; }
+        
+        /* FIX: Quitar arrows del input number y ampliar width */
+        input[type=number]::-webkit-inner-spin-button, 
+        input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+        input[type=number] { -moz-appearance: textfield; }
+
+        .rate-edit { border: none; width: 55px; font-size: 12px; font-weight: 700; color: #334155; text-align: right; outline:none; background: transparent; }
 
         .bal-section-right { text-align: right; min-width: 80px; }
         .bal-badge { 
@@ -164,7 +169,7 @@
         .filter-bar {
             display: flex; gap: 10px; margin-bottom: 15px; align-items: center;
             background: white; padding: 8px 12px; border-radius: 8px; border: 1px solid var(--border);
-            flex-wrap: wrap; /* Para pantallas chicas */
+            flex-wrap: wrap; 
         }
         .filter-label { font-size: 11px; font-weight: 700; color: var(--text-secondary); margin-right: 5px; text-transform: uppercase; }
         .filter-input {
@@ -172,7 +177,6 @@
         }
         .filter-input:focus { border-color: var(--info); background: white; }
         
-        /* Input de búsqueda específico */
         #filterSearch { flex: 1; min-width: 150px; }
         
         .btn-reset-filter {
@@ -504,7 +508,7 @@
         const lastDay = new Date(y, m, 0).getDate();
         document.getElementById('filterStart').value = `${ym}-01`;
         document.getElementById('filterEnd').value = `${ym}-${lastDay}`;
-        document.getElementById('filterSearch').value = ''; // Reset búsqueda
+        document.getElementById('filterSearch').value = ''; 
 
         document.getElementById('copyZone').style.display = currentTxs.length === 0 ? 'block' : 'none';
         applyFilters();
@@ -514,13 +518,13 @@
         const start = document.getElementById('filterStart').value;
         const end = document.getElementById('filterEnd').value;
         const cat = document.getElementById('filterCat').value;
-        const term = document.getElementById('filterSearch').value.toLowerCase(); // Texto a buscar
+        const term = document.getElementById('filterSearch').value.toLowerCase();
 
         filteredTxs = currentTxs.filter(t => {
             if(start && t.date < start) return false;
             if(end && t.date > end) return false;
             if(cat !== 'all' && t.cat !== cat) return false;
-            if(term && !t.desc.toLowerCase().includes(term) && !t.cat.toLowerCase().includes(term)) return false; // Filtro de texto
+            if(term && !t.desc.toLowerCase().includes(term) && !t.cat.toLowerCase().includes(term)) return false; 
             return true;
         });
 
