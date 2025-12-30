@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>J&M Financial V41 (Filtros)</title>
+    <title>J&M Financial V40.1 (Smart Desktop)</title>
     
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -140,28 +140,18 @@
             width: 60px; text-align: right; border-radius: 4px; padding: 2px 5px; font-size: 12px; font-weight: 700;
         }
 
-        /* --- FILTER BAR (NUEVO) --- */
-        .filter-bar {
-            display: flex; align-items: center; gap: 15px; margin-bottom: 20px;
-            background: #FFFFFF; padding: 10px 15px; border-radius: 10px; 
-            border: 1px solid var(--border); box-shadow: var(--shadow-sm);
+        /* COPY ZONE (Nuevo funcionalidad mobile) */
+        .copy-zone {
+            display: none; background: white; border: 1px dashed var(--border); border-radius: 12px; padding: 15px; margin-bottom: 25px;
+            text-align: center;
         }
-        .filter-group { display: flex; align-items: center; gap: 8px; }
-        .filter-lbl { font-size: 11px; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; }
-        .filter-select, .filter-date {
-            border: 1px solid var(--border); border-radius: 6px; padding: 6px 10px;
-            font-family: 'Inter'; font-size: 13px; color: var(--text-main); background: #F9FAFB;
-        }
-        .btn-clear-filter {
-            background: transparent; border: 1px solid var(--border); color: var(--text-secondary);
-            font-size: 12px; font-weight: 600; padding: 6px 12px; border-radius: 6px; cursor: pointer;
-        }
-        .btn-clear-filter:hover { background: #F3F4F6; }
+        .copy-controls { display: flex; justify-content: center; gap: 10px; margin-top: 10px; align-items: center; }
+        .btn-copy-month { background: var(--text-main); color: white; border: none; padding: 8px 15px; border-radius: 6px; font-weight: 700; font-size: 12px; cursor: pointer; }
 
         /* LAYOUT PRINCIPAL */
         .layout-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 25px; align-items: start; }
 
-        /* --- CUENTAS T --- */
+        /* --- CUENTAS T CON SCROLL INTERNO --- */
         .t-account-container {
             background: var(--card-bg); border-radius: 12px; border: 1px solid var(--border);
             box-shadow: var(--shadow-sm); overflow: hidden; display: flex; flex-direction: column;
@@ -173,13 +163,26 @@
             flex-shrink: 0;
         }
         .t-body { display: flex; flex: 1; position: relative; overflow: hidden; }
-        .t-divider { width: 1px; background: var(--border); position: absolute; top: 0; bottom: 0; left: 50%; transform: translateX(-50%); z-index: 10; }
+        
+        .t-divider {
+            width: 1px; background: var(--border); position: absolute;
+            top: 0; bottom: 0; left: 50%; transform: translateX(-50%); z-index: 10;
+        }
+        
         .t-side { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
-        .t-col-header { padding: 10px; text-align: center; font-size: 11px; font-weight: 700; text-transform: uppercase; border-bottom: 1px solid var(--border); flex-shrink: 0; }
+        
+        .t-col-header {
+            padding: 10px; text-align: center; font-size: 11px; font-weight: 700; text-transform: uppercase;
+            border-bottom: 1px solid var(--border); flex-shrink: 0;
+        }
         .h-debe { color: var(--success); background: rgba(16, 185, 129, 0.05); }
         .h-haber { color: var(--danger); background: rgba(239, 68, 68, 0.05); }
 
-        .t-list-scroll { flex: 1; overflow-y: auto; padding: 0; scrollbar-width: thin; scrollbar-color: #E2E8F0 transparent; }
+        /* SCROLL INDEPENDIENTE */
+        .t-list-scroll { 
+            flex: 1; overflow-y: auto; padding: 0; 
+            scrollbar-width: thin; scrollbar-color: #E2E8F0 transparent;
+        }
         .t-list-scroll::-webkit-scrollbar { width: 6px; }
         .t-list-scroll::-webkit-scrollbar-thumb { background-color: #E2E8F0; border-radius: 3px; }
 
@@ -188,10 +191,23 @@
             display: flex; justify-content: space-between; align-items: center; font-size: 13px; transition: 0.1s;
         }
         .t-row:hover { background: #F9FAFB; }
+        
+        /* Estilos de Estado Ejecutado (Mobile) */
+        .t-row.executed .t-desc { text-decoration: line-through; color: #9CA3AF; }
+        .t-row.executed .t-amt { text-decoration: line-through; opacity: 0.6; }
+
         .t-desc { font-weight: 600; color: var(--text-main); }
         .t-meta { font-size: 10px; color: var(--text-secondary); margin-top: 2px; }
-        .t-amt { font-weight: 700; }
+        .t-amt { font-weight: 700; text-align: right; }
         .t-green { color: var(--success); } .t-red { color: var(--danger); }
+
+        /* Badge de "Quedan" (Mobile logic) */
+        .subtotal-tag {
+            font-size: 9px; font-weight: 700; padding: 2px 5px; border-radius: 4px;
+            display: block; margin-top: 2px; width: fit-content; margin-left: auto;
+        }
+        .st-ok { background: #DCFCE7; color: #166534; } 
+        .st-bad { background: #FEE2E2; color: #991B1B; }
 
         /* --- CHART PANEL --- */
         .chart-card {
@@ -201,9 +217,14 @@
         }
         .chart-header { display: flex; justify-content: space-between; margin-bottom: 10px; }
         .chart-title { font-size: 13px; font-weight: 700; }
+        
         .chart-wrapper { height: 200px; position: relative; flex-shrink: 0; margin-bottom: 15px; }
+        
         .legend-list { flex: 1; overflow-y: auto; padding-right: 5px; scrollbar-width: thin; }
-        .legend-item { display: flex; align-items: center; justify-content: space-between; font-size: 12px; padding: 8px 0; border-bottom: 1px dashed #F3F4F6; }
+        .legend-item { 
+            display: flex; align-items: center; justify-content: space-between; 
+            font-size: 12px; padding: 8px 0; border-bottom: 1px dashed #F3F4F6; 
+        }
         .leg-left { display: flex; align-items: center; gap: 8px; }
         .leg-color { width: 8px; height: 8px; border-radius: 2px; }
         .leg-cat { font-weight: 600; color: var(--text-main); font-size: 11px; }
@@ -222,14 +243,16 @@
         .modal.open { opacity: 1; pointer-events: all; transform: translate(-50%, -50%) scale(1); }
         .modal-head { padding: 15px 20px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; font-weight: 700; }
         .modal-body { padding: 20px; }
+        
         .type-toggle { display: flex; background: #F3F4F6; padding: 4px; border-radius: 8px; margin-bottom: 20px; }
         .tt-opt { flex: 1; text-align: center; padding: 8px; font-size: 13px; font-weight: 600; border-radius: 6px; cursor: pointer; color: var(--text-secondary); }
         .tt-opt.active.inc { background: var(--success); color: white; }
         .tt-opt.active.exp { background: var(--danger); color: white; }
+        
         .inp-full { width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: 6px; margin-bottom: 15px; background: #F9FAFB; font-size: 14px; }
         .btn-save { width: 100%; padding: 12px; background: var(--text-main); color: white; font-weight: 700; border: none; border-radius: 8px; cursor: pointer; }
         
-        /* Loader & Dots */
+        /* Loader */
         .loader-overlay { position:fixed; inset:0; background:rgba(255,255,255,0.9); z-index:200; display:none; flex-direction:column; align-items:center; justify-content:center; }
         .spinner { width:40px; height:40px; border:4px solid #E5E7EB; border-top:4px solid var(--info); border-radius:50%; animation:spin 1s linear infinite; }
         @keyframes spin { 0% { transform:rotate(0deg); } 100% { transform:rotate(360deg); } }
@@ -287,10 +310,12 @@
             
             <div class="kpi-card balance-card">
                 <div class="kpi-label" style="color:#3B82F6;">Balance Neto</div>
+                
                 <div class="bal-row-main">
                     <span id="kpiBal" class="bal-pesos">$0</span>
                     <div class="bal-badge" id="savingRate">0% Ahorro</div>
                 </div>
+                
                 <div class="bal-row-sub">
                     <span>USD <span id="kpiUsd" class="usd-val">0.00</span></span>
                     <span style="color:#CBD5E1">|</span>
@@ -299,23 +324,17 @@
             </div>
         </div>
 
-        <div class="filter-bar">
-            <div class="filter-group">
-                <span class="filter-lbl"><i class="fas fa-filter"></i> Filtrar:</span>
-                <select id="filterCat" class="filter-select" onchange="runFilter()">
-                    <option value="all">Todas las Categorías</option>
-                </select>
+        <div class="copy-zone" id="copyZone">
+            <div style="font-size:13px; color:var(--text-secondary); font-weight:600; margin-bottom:5px;">Mes vacío. Importar movimientos de:</div>
+            <div class="copy-controls">
+                <input type="month" id="copySourcePicker" class="inp-full" style="width:auto; height:38px; margin:0; padding:5px 10px;">
+                <button class="btn-copy-month" onclick="copyFromSelected()"><i class="fas fa-copy"></i> CLONAR MES</button>
             </div>
-            <div class="filter-group">
-                <span class="filter-lbl">Fecha:</span>
-                <input type="date" id="filterDate" class="filter-date" onchange="runFilter()">
-            </div>
-            <button class="btn-clear-filter" onclick="resetFilters()">Limpiar</button>
         </div>
 
         <div class="layout-grid">
             <div class="t-account-container">
-                <div class="t-header">Movimientos</div>
+                <div class="t-header">Movimientos del Mes</div>
                 <div class="t-body">
                     <div class="t-divider"></div>
                     <div class="t-side">
@@ -376,12 +395,16 @@
     const defData = { txs: [], cats: { exp:['Esenciales','Deudas','Personal','Ahorro'], inc:['Sueldo','Ventas','Varios'] }, concepts: { "Esenciales": ["Alquiler", "Luz/Gas", "Supermercado"], "Deudas": ["Tarjeta Visa"], "Sueldo": ["Javier", "Mary"] } };
     const chartColors = ['#3B82F6','#10B981','#F59E0B','#EF4444','#8B5CF6','#EC4899','#6366F1','#64748B'];
     let data = defData;
-    let editId = null, chartInstance = null, baseTxs = []; // baseTxs = month data without filters
+    let editId = null, chartInstance = null, currentTxs = [];
 
     window.onload = () => {
         const d = new Date();
         document.getElementById('fDate').value = d.toISOString().split('T')[0];
         document.getElementById('dateInput').value = d.toISOString().slice(0, 7);
+        
+        let prevM = new Date(); prevM.setMonth(prevM.getMonth()-1);
+        document.getElementById('copySourcePicker').value = prevM.toISOString().slice(0, 7);
+        
         if(localStorage.getItem('usdRate')) document.getElementById('usdRate').value = localStorage.getItem('usdRate');
         forceSync();
     };
@@ -410,75 +433,69 @@
         const months = ["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"];
         document.getElementById('monthTxt').innerText = `${months[parseInt(m)-1]} ${y}`;
         
-        // 1. Get Base Data for Month
-        baseTxs = (data.txs || []).filter(t => t.date.startsWith(ym)).sort((a,b) => a.date.localeCompare(b.date));
+        // 1. Filtrar
+        currentTxs = (data.txs || []).filter(t => t.date.startsWith(ym));
         
-        // 2. Populate Filters
-        populateFilterCats();
-        
-        // 3. Run Filters to render
-        runFilter();
+        // 2. Logic de COPY (Mobile)
+        document.getElementById('copyZone').style.display = currentTxs.length === 0 ? 'block' : 'none';
+
+        renderTView(currentTxs); renderChart(currentTxs, null); renderCats();
     }
 
-    // --- FILTER LOGIC ---
-    function populateFilterCats() {
-        // Collect all unique cats from current month data
-        const cats = new Set();
-        baseTxs.forEach(t => cats.add(t.cat));
-        
-        const sel = document.getElementById('filterCat');
-        const currentVal = sel.value;
-        sel.innerHTML = '<option value="all">Todas las Categorías</option>';
-        Array.from(cats).sort().forEach(c => {
-            const opt = document.createElement('option');
-            opt.value = c; opt.innerText = c;
-            sel.appendChild(opt);
-        });
-        sel.value = currentVal === 'all' || cats.has(currentVal) ? currentVal : 'all';
-    }
-
-    function runFilter() {
-        const fCat = document.getElementById('filterCat').value;
-        const fDate = document.getElementById('filterDate').value;
-        
-        let filtered = baseTxs;
-        
-        // Filter Category
-        if(fCat !== 'all') {
-            filtered = filtered.filter(t => t.cat === fCat);
-        }
-        // Filter Date
-        if(fDate) {
-            filtered = filtered.filter(t => t.date === fDate);
-        }
-
-        renderTView(filtered);
-        renderChart(filtered, null);
-        // We also need to re-render concepts if new transaction
-        renderCats(); 
-    }
-
-    function resetFilters() {
-        document.getElementById('filterCat').value = 'all';
-        document.getElementById('filterDate').value = '';
-        runFilter();
-    }
-
-    // --- RENDERERS ---
     function renderTView(txs) {
         const lInc = document.getElementById('list-inc'), lExp = document.getElementById('list-exp');
         lInc.innerHTML = ''; lExp.innerHTML = '';
         let sInc=0, sExp=0; const today = new Date().toISOString().split('T')[0];
 
-        txs.forEach(t => {
-            const isInc = t.type === 'inc'; const amt = Math.abs(t.amount);
-            if(isInc) sInc += amt; else sExp += amt;
+        // 3. Ordenamiento Avanzado (Mobile Logic: Timeline)
+        let timeLine = [...txs];
+        timeLine.sort((a,b) => {
+            if (a.date !== b.date) return a.date.localeCompare(b.date);
+            if (a.type !== b.type) return a.type === 'inc' ? -1 : 1;
+            if (a.exec !== b.exec) return b.exec - a.exec;
+            return Math.abs(b.amount) - Math.abs(a.amount);
+        });
+
+        // 4. Calculo de Saldo y Distribución
+        let runningBalance = 0;
+        
+        timeLine.forEach(t => {
+            const isInc = t.type === 'inc'; 
+            const amt = Math.abs(t.amount);
+            
+            // Calculo Global
+            if(isInc) {
+                runningBalance += amt;
+                sInc += amt;
+            } else {
+                runningBalance -= amt;
+                sExp += amt;
+            }
+
             let dot = '';
+            // Alerta si vence pronto (solo no ejecutados)
             if(!t.exec && !isInc && (new Date(t.date) - new Date(today)) / 86400000 <= 5) dot = `<span class="alert-dot" title="Vence pronto"></span>`;
             
+            // Etiqueta "Quedan" (Solo gastos)
+            let balHtml = '';
+            if (!isInc) {
+                balHtml = `<span class="subtotal-tag ${runningBalance >= 0 ? 'st-ok' : 'st-bad'}">Quedan: $${Math.floor(runningBalance).toLocaleString()}</span>`;
+            }
+
             const div = document.createElement('div');
-            div.className = 't-row'; div.onclick = () => edit(t.id);
-            div.innerHTML = `<div><div class="t-desc">${t.desc} ${dot}</div><div class="t-meta">${t.cat} • ${t.date.split('-')[2]}</div></div><div class="t-amt ${isInc?'t-green':'t-red'}">${isInc?'+':''}$${Math.floor(amt).toLocaleString()}</div>`;
+            // Clase executed para visual (Mobile)
+            div.className = `t-row ${t.exec ? 'executed' : ''}`; 
+            div.onclick = () => edit(t.id);
+            div.innerHTML = `
+                <div style="flex:1">
+                    <div class="t-desc">${t.desc} ${dot}</div>
+                    <div class="t-meta">${t.cat} • ${t.date.split('-')[2]}</div>
+                </div>
+                <div style="text-align:right">
+                    <div class="t-amt ${isInc?'t-green':'t-red'}">${isInc?'+':''}$${Math.floor(amt).toLocaleString()}</div>
+                    ${balHtml}
+                </div>`;
+            
             (isInc ? lInc : lExp).appendChild(div);
         });
 
@@ -493,6 +510,7 @@
         const rate = parseFloat(document.getElementById('usdRate').value) || 1;
         document.getElementById('kpiUsd').innerText = (bal/rate).toFixed(2);
         
+        // Calculo % Ahorro
         let savPct = 0;
         if(sInc > 0) savPct = ((sInc - sExp) / sInc) * 100;
         const savEl = document.getElementById('savingRate');
@@ -542,10 +560,25 @@
             leg.appendChild(item);
         });
     }
-    
-    function resetChart() { renderChart(baseTxs, null); } // Reset to base loaded data
 
-    // --- FORM & ACTIONS ---
+    // Funcionalidad de Copiar Mes (Mobile)
+    function copyFromSelected() {
+        const sourceYM = document.getElementById('copySourcePicker').value;
+        const targetYM = document.getElementById('dateInput').value;
+        if(!sourceYM || sourceYM === targetYM) return alert("Selecciona un mes origen distinto al actual");
+        const sourceTxs = (data.txs || []).filter(t => t.date.startsWith(sourceYM));
+        if(sourceTxs.length === 0) return alert("El mes origen no tiene datos");
+        
+        const newTxs = sourceTxs.map(t => {
+            const day = t.date.split('-')[2];
+            return { ...t, id: Date.now() + Math.random(), date: `${targetYM}-${day}`, exec: false };
+        });
+        
+        data.txs = [...data.txs, ...newTxs];
+        saveData();
+    }
+    
+    function resetChart() { renderChart(currentTxs, null); }
     function openSheet() { if(!editId) resetForm(); document.getElementById('modal').classList.add('open'); document.getElementById('overlay').style.display='block'; }
     function closeSheet() { document.getElementById('modal').classList.remove('open'); document.getElementById('overlay').style.display='none'; }
     function setType(t) { document.getElementById('fType').value = t; document.getElementById('sw-inc').className = `tt-opt ${t=='inc'?'active inc':''}`; document.getElementById('sw-exp').className = `tt-opt ${t=='exp'?'active exp':''}`; renderCats(); }
